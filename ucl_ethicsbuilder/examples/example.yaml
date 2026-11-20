@@ -1,0 +1,207 @@
+# A fictional study used as the tool's example and test fixture. All people, organisations, numbers and
+# events are invented. It deliberately combines many features (questionnaires, co-design at community
+# venues, an event abroad, insider roles, an industry partner, incentives, paper consent) so that one file
+# exercises most of the rules; tests derive simpler variants from it.
+title: Play, Wellbeing and Shared Spaces (example study)
+start_date: '2027-01-01'
+end_date: '2029-12-31'
+related_ethics_id: ''
+funded: true
+funder: Example Research Fund
+team:
+- is_pi: true
+  external: false
+  title: Dr
+  first_name: Alex
+  surname: Example
+  email: alex.example@example.ac.uk
+  faculty: Faculty of Brain Sciences
+  department: Example Department
+  organisation: UCL
+  org_type: UK higher education institution
+  country: United Kingdom
+  data_access: pseudonymised
+  role: ''
+  experience: Trained Mental Health First Aider with ten years' experience running studies with
+    gaming communities; leads all recruitment, consent and data collection.
+  safeguarding_role: Mental Health First Aider
+  dual_role: true
+  dual_role_details: Active member of the board-gaming community; leads all recruitment,
+    consent and data collection but has no event organisation role.
+- is_pi: false
+  external: false
+  title: Dr
+  first_name: Sam
+  surname: Sample
+  email: ''
+  faculty: Faculty of Brain Sciences
+  department: Example Department
+  organisation: UCL
+  org_type: UK higher education institution
+  country: United Kingdom
+  data_access: pseudonymised
+  role: Co-investigator; clinical oversight
+  experience: Trained clinician with experience of research with neurodivergent adults.
+  safeguarding_role: Clinician / clinical psychologist
+  dual_role: false
+  dual_role_details: ''
+- is_pi: false
+  external: true
+  title: Dr
+  first_name: Jordan
+  surname: Placeholder
+  email: ''
+  faculty: Faculty of Brain Sciences
+  department: ''
+  organisation: Example University
+  org_type: UK higher education institution
+  country: United Kingdom
+  data_access: aggregated
+  role: Event organisation only (not involved in recruitment or consent)
+  experience: ''
+  safeguarding_role: ''
+  dual_role: true
+  dual_role_details: Co-organiser of the Example Games Expo 2027; focuses exclusively on event
+    organisation and is not involved in recruitment, consent or data collection.
+- is_pi: false
+  external: true
+  title: Ms
+  first_name: Robin
+  surname: Demo
+  email: ''
+  faculty: Faculty of Brain Sciences
+  department: ''
+  organisation: Example Partner Ltd
+  org_type: Industry partner
+  country: Netherlands
+  data_access: aggregated
+  role: Co-investigator and prototype developer
+  experience: ''
+  safeguarding_role: ''
+  dual_role: false
+  dual_role_details: ''
+- is_pi: false
+  external: true
+  title: Mr
+  first_name: Kai
+  surname: Specimen
+  email: ''
+  faculty: Faculty of Brain Sciences
+  department: ''
+  organisation: Example Partner Ltd
+  org_type: Industry partner
+  country: Netherlands
+  data_access: aggregated
+  role: Co-investigator and provider of workshop materials
+  experience: ''
+  safeguarding_role: ''
+  dual_role: false
+  dual_role_details: ''
+aims: This fictional project explores how adults, including neurodivergent adults, use tabletop
+  and digital games to cope with everyday stress, and co-designs a community wellbeing toolkit
+  and accessible game-night formats with players, venues and an industry partner.
+benefits: The project will produce a freely available community wellbeing toolkit co-designed with
+  and for gaming communities, and give participants a space to share experiences that shape it.
+phases:
+- name: Online survey
+  location: online
+  lab_location: ''
+  duration_min: 30
+  sample_size: 250
+  sample_justification: Power analysis - 193 participants detect r = .20 with 80% power at
+    alpha = .05; 250 allow for exclusions.
+  methods:
+  - survey
+  instruments:
+  - wemwbs
+  - phq8
+  - gad7
+  custom_tools: []
+- name: Interviews
+  location: online
+  lab_location: ''
+  duration_min: 60
+  sample_size: 20
+  sample_justification: Standard for qualitative interview studies.
+  methods:
+  - interview
+  instruments: []
+  custom_tools:
+  - Interview_Topic_Guide.pdf
+- name: Co-design workshops
+  location: community_venue
+  lab_location: Game cafés in London, or UCL main campus as fallback
+  duration_min: 180
+  sample_size: 20
+  sample_justification: Limited by the space available at partner venues.
+  methods:
+  - creative_workshop
+  - co_design
+  instruments: []
+  custom_tools:
+  - Workshop_Plan.pdf
+- name: Games expo event
+  location: event
+  lab_location: Example Games Expo 2027, Berlin
+  outside_uk: true
+  duration_min: 120
+  sample_size: 20
+  sample_justification: Limited by the room capacity at the expo.
+  methods:
+  - survey
+  - observation
+  instruments: []
+  custom_tools:
+  - Event_Survey.pdf
+custom_tools: []
+populations:
+- neurodivergent
+- gamers
+min_age: 18
+max_age: 99
+age_justification: Adults only; no upper limit as the gaming community spans all adult ages.
+inclusion:
+- Able to give informed consent
+- Plays tabletop or digital games at least once a month
+exclusion:
+- Took part in the pilot of this study
+demographics:
+- age
+- gender
+- ethnicity
+- neurodivergence status
+channels:
+- community
+- social_media
+- posters
+- venues
+- event_programme
+decision_time: at least one week
+deception: false
+disclosures: false
+security_sensitive: false
+researcher_risk: false
+medicinal: false
+invasive: false
+rate_per_hour: 10.0
+payment_method: in retailer vouchers
+course_credit: false
+pay_on_withdrawal: pro rata
+travel_expenses: true
+in_kind: a board game of their choice at workshops
+prize: a prize of up to £100 for the winner of the game-design challenge
+withdrawal_amount: 4
+withdrawal_unit: weeks
+retention_years: 10
+storage: UCL OneDrive for Business
+dp_registration: Z0000000/2027/01/01
+paper_consent: true
+data_sharing_agreement: true
+open_data: false
+community_summary: true
+dissemination_venues: ACM CHI and CHI PLAY
+screening_method: own
+screening_details: |-
+  Participants confirm eligibility through yes/no questions at the start of the online survey and when signing up for interviews, workshops or the expo session. We ask whether they play tabletop or digital games at least once a month, and (optionally) whether they identify as neurodivergent; no diagnosis details are asked.
+
+  Ineligible people see a message thanking them for their interest, without being told which answer excluded them, with links to general support services.

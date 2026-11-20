@@ -1,0 +1,4 @@
+# Local development: tests and the ethics@ucl filler (not needed on the hosted version).
+-r requirements.txt
+pytest==9.2.0
+playwright==1.65.2

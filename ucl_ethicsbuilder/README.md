@@ -8,13 +8,25 @@ Fill in the parts of a UCL ethics application that change; generate the generic 
 ```powershell
 python -m venv .venv
 .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # app + tests + filler
 streamlit run app.py        # opens http://localhost:8501
 pytest                      # run the tests
 ```
 
 Use **Save project** to download your inputs as `.yaml` and **Load project** to continue later.
-To see a full application, use **Load project** with one of the files in `examples/`.
+To see a full application, use **Load project** with `examples/example.yaml`.
+
+## Hosted test version (Streamlit Community Cloud)
+
+Deployed from this repository: main file `ucl_ethicsbuilder/app.py`; dependencies come from
+`ucl_ethicsbuilder/requirements.txt`. In the app's **Settings → Secrets** set
+
+```toml
+ETHICS_HOSTED = "1"
+```
+
+so the hosted copy hides the ethics@ucl filler and never writes to the shared library. Hosting is in the US:
+use it with test data only, never real participant or applicant data.
 
 ## How it is organised
 
@@ -38,7 +50,7 @@ To see a full application, use **Load project** with one of the files in `exampl
 | `checks.py` | Missing fields, unanswered questions that apply, and unfilled `[placeholders]` |
 | `filler/inventory.py` | Read-only crawl of all form questions and rules → `filler/form_inventory.json`, `docs/form_inventory.md` |
 | `app.py` | Streamlit UI (7 steps: screening & project first, then the research team); input only, no logic. Questions from `questions.yaml` appear at the end of their step when they apply |
-| `examples/*.yaml` | The three approved applications (eye tracking, Grimdark, M.E.E.T.) as tool input |
+| `examples/example.yaml` | One fictional study (all names and organisations invented) that exercises most rules; also the test fixture |
 
 **Add a new method or questionnaire:** add an entry to `library/methods.yaml` or
 `library/instruments.yaml`. No code change needed.

@@ -54,9 +54,28 @@ def test_conditions_use_real_form_options(where, source, options):
         assert any(_matches(label, [opt]) for label in labels), f"{where}: '{opt}' is not an option of {source}"
 
 
+def example() -> Project:
+    """The single fictional example project (examples/example.yaml)."""
+    return load_project(ROOT / "examples" / "example.yaml")
+
+
+def uk_only() -> Project:
+    """The example with every procedure in the UK."""
+    p = example()
+    for ph in p.phases:
+        ph.outside_uk = False
+    return p
+
+
+def without_industry_partner() -> Project:
+    p = example()
+    p.team = [r for r in p.team if r.org_type != "Industry partner"]
+    return p
+
+
 # ---------- which questions apply ----------
 def test_typical_low_risk_study_gets_only_a_few_questions():
-    asked = numbers(load_project(ROOT / "examples" / "meet.yaml"))
+    asked = numbers(uk_only())
     assert len(asked) <= 10
     assert not [n for n in asked if n[0] in "FGH" or n.startswith(("I4", "I5", "I6", "I7", "I8", "I9", "E9"))]
 
@@ -121,14 +140,14 @@ def test_answers_survive_save_and_load():
 
 # ---------- streamlined study procedures ----------
 def test_d2_6_only_after_stakeholder_input():
-    p = load_project(ROOT / "examples" / "meet.yaml")
+    p = example()
     assert "D2.4" in numbers(p) and "D2.6" not in numbers(p)
     p.answers["D2.4"] = "Yes"
     assert {"D2.5", "D2.6"} <= set(numbers(p))
 
 
 def test_overseas_questions_follow_the_procedure_flags():
-    p = load_project(ROOT / "examples" / "meet.yaml")
+    p = uk_only()
     assert not p.collect_abroad and "D3.1" not in numbers(p)
     assert form_choices(p, LIB)["D3"] == "No"
     p.phases[0].outside_uk = True
@@ -151,7 +170,7 @@ def value(p: Project, number: str):
 
 
 def test_travel_follows_in_person_procedures_abroad():
-    p = load_project(ROOT / "examples" / "gaze.yaml")             # Phase 2: lab in Frankfurt
+    p = example()                                                  # games expo in Berlin (in person)
     assert value(p, "D3.2") == "Yes"
     for ph in p.phases:
         ph.outside_uk = ph.location == "online"                    # only online participants abroad
@@ -160,17 +179,17 @@ def test_travel_follows_in_person_procedures_abroad():
 
 
 def test_overseas_locations_listed_from_procedures():
-    text = value(load_project(ROOT / "examples" / "grimdark.yaml"), "D3.1")
-    assert "Conference gaming and painting event" in text and "Frankfurt" in text
+    text = value(example(), "D3.1")
+    assert "Games expo event" in text and "Berlin" in text
 
 
 def test_conflict_of_interest_follows_industry_partner():
-    assert value(load_project(ROOT / "examples" / "meet.yaml"), "C6") == "Yes"     # industry partner
-    assert value(load_project(ROOT / "examples" / "gaze.yaml"), "C6") == "No"
+    assert value(example(), "C6") == "Yes"
+    assert value(without_industry_partner(), "C6") == "No"
 
 
 def test_users_own_answer_wins_over_suggestion():
-    p = load_project(ROOT / "examples" / "meet.yaml")
+    p = example()
     p.answers["C6"] = "No"
     assert value(p, "C6") == "No"
 
@@ -182,7 +201,7 @@ def e2_2(p: Project) -> str:
 
 
 def test_screening_text_follows_the_chosen_technique():
-    p = load_project(ROOT / "examples" / "gaze.yaml")
+    p = example()
     assert e2_2(p) == p.screening_details               # own technique: the applicant's words
     p.screening_method, p.screening_survey = "survey", ["phq8"]
     text = e2_2(p)
@@ -200,7 +219,7 @@ def derive_exclusions(p):
 
 
 def test_sensitive_topics_named_and_self_harm_protocol_left_to_researcher():
-    p = load_project(ROOT / "examples" / "gaze.yaml")
+    p = example()
     p.phases[0].instruments = ["phq9"]
     p.answers["I5"] = ""                                           # empty answers fall back to the suggestion
     assert "PHQ-9" in value(p, "I5")
@@ -222,7 +241,7 @@ def test_placeholders_in_suggestions_are_caught_by_checks():
 
 
 def test_data_sharing_text_excludes_recordings_and_uses_retention():
-    p = load_project(ROOT / "examples" / "grimdark.yaml")
+    p = example()
     p.open_data = True
     text = value(p, "J6")
     assert f"{p.retention_years} years" in text
@@ -230,7 +249,7 @@ def test_data_sharing_text_excludes_recordings_and_uses_retention():
 
 
 def test_undergraduate_special_category_number_reuses_j1_1():
-    p = load_project(ROOT / "examples" / "meet.yaml")              # ethnicity + health data
+    p = example()                                                  # ethnicity + health data
     p.project_type, p.dp_registration = "undergraduate", "Z6364106/2025/01/23"
     plan = {q: v for q, _, v in build_plan(p, LIB)}
     assert plan["J1.3.1)"] == "Z6364106/2025/01/23"

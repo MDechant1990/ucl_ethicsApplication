@@ -13,92 +13,94 @@ ROOT = Path(__file__).parent.parent
 LIB = load_library()
 
 
-def example(name: str) -> Project:
-    return load_project(ROOT / "examples" / f"{name}.yaml")
+def example() -> Project:
+    """The single fictional example project (examples/example.yaml)."""
+    return load_project(ROOT / "examples" / "example.yaml")
 
 
 def answers(p: Project) -> dict[str, str]:
     return {a["id"]: a["text"] for a in render_answers(p, LIB)}
 
 
-# ---------- all examples ----------
-@pytest.mark.parametrize("name", ["gaze", "grimdark", "meet"])
-def test_examples_are_low_risk_and_render(name):
-    p = example(name)
+# ---------- the example ----------
+def test_example_is_low_risk_and_renders():
+    p = example()
     assert derive(p, LIB)["risk_level"] == "low"
     for text in list(answers(p).values()) + list(render_documents(p, LIB).values()):
         assert "{{" not in text and "{%" not in text
 
 
-# ---------- eye tracking ----------
-def test_gaze_sensitivity_flag():
-    flags = derive(example("gaze"), LIB)["flags"]
+# ---------- questionnaires, overseas procedure, withdrawal ----------
+def test_sensitivity_flag():
+    flags = derive(example(), LIB)["flags"]
     assert any(f.level == "borderline" and "PHQ-8" in f.message for f in flags)
 
 
-def test_gaze_has_only_the_overseas_todo():
-    p = example("gaze")
+def test_only_the_overseas_todo_is_left():
+    p = example()
     assert check_placeholders(render_answers(p, LIB), render_documents(p, LIB)) == [
         "Debrief: unfilled placeholder [Add equivalent support services for the overseas site.]"]
     assert check_project(p) == []
 
 
 def test_withdrawal_window_is_consistent_everywhere():
-    p = example("gaze")
+    p = example()
     p.withdrawal_amount = 6
     a, docs = answers(p), render_documents(p, LIB)
     for text in [a["E10"], a["E12"], a["J1.6"], docs["Information sheet"], docs["Consent form"]]:
         assert "6 weeks" in text and "4 weeks" not in text
 
 
-# ---------- grimdark: co-design, venues, events, insiders, incentives ----------
-def test_grimdark_locations_need_permissions():
-    a = answers(example("grimdark"))
+# ---------- co-design, venues, events, insiders, incentives ----------
+def test_locations_need_permissions():
+    a = answers(example())
     assert "venue owner" in a["D4.1"] and "event organisers" in a["D4.1"]
-    assert "Warhammer Conference 2026" in a["D4"]
+    assert "Example Games Expo 2027" in a["D4"]
 
 
-def test_grimdark_incentives_and_other_issues():
-    a = answers(example("grimdark"))
-    assert "retailer vouchers" in a["E6.1"] and "miniature" in a["E6.1"] and "£100" in a["E6.1"]
+def test_incentives_and_other_issues():
+    a = answers(example())
+    assert "retailer vouchers" in a["E6.1"] and "board game" in a["E6.1"] and "£100" in a["E6.1"]
     for title in ["Online recruitment", "Researcher wellbeing", "Community representation", "Prizes"]:
         assert title in a["I10"]
-    assert "Dr Mike Ryder: Co-organiser of the Warhammer Conference" in a["E3.1"]
-    assert "Dr Martin Dechant: Active member" in a["E3.1"]
+    assert "Dr Jordan Placeholder: Co-organiser of the Example Games Expo" in a["E3.1"]
+    assert "Dr Alex Example: Active member" in a["E3.1"]
 
 
-def test_grimdark_paper_consent_is_stored_safely():
-    a = answers(example("grimdark"))
+def test_paper_consent_is_stored_safely():
+    a = answers(example())
     assert "paper consent form" in a["E8.2"]
     assert "locked cabinet" in a["J3"]
 
 
-# ---------- M.E.E.T.: neurodivergent, industry partner, short withdrawal ----------
-def test_meet_neurodivergent_is_borderline_with_justification():
-    p = example("meet")
+# ---------- neurodivergent, industry partner, short withdrawal ----------
+def test_neurodivergent_is_borderline_with_justification():
+    p = example()
     assert any(f.level == "borderline" and "Neurodivergent" in f.message for f in derive(p, LIB)["flags"])
     assert "not considered vulnerable by default" in answers(p)["I1.1"]
 
 
-def test_meet_special_category_includes_ethnicity_and_health():
-    j13 = answers(example("meet"))["J1.3/J1.4"]
+def test_special_category_includes_ethnicity_and_health():
+    j13 = answers(example())["J1.3/J1.4"]
     assert "racial or ethnic origin" in j13 and "neurodivergence" in j13
 
 
-def test_meet_industry_partner_gets_no_personal_data():
-    a = answers(example("meet"))
+def test_industry_partner_gets_no_personal_data():
+    a = answers(example())
     assert a["J1.5.1"].startswith("No personal data are transferred outside UCL.")
-    assert a["J1.5.1"].count("Ahrend") == 1  # one line per organisation
+    assert a["J1.5.1"].count("Example Partner Ltd") == 1  # one line per organisation (two people)
     assert "Industry partner involvement" in a["I10"]
 
 
-def test_meet_short_withdrawal_window_is_flagged():
-    issues = check_project(example("meet"))
+def test_short_withdrawal_window_is_flagged():
+    p = example()
+    p.withdrawal_amount, p.withdrawal_unit = 5, "working days"
+    issues = check_project(p)
     assert any("5 working days is short" in i for i in issues)
 
 
 def test_pro_rata_pay_on_withdrawal():
-    assert "pro rata for the time they took part" in answers(example("meet"))["E6.1"]
+    assert "pro rata for the time they took part" in answers(example())["E6.1"]
 
 
 # ---------- rules ----------
@@ -138,7 +140,7 @@ def test_old_team_format_still_loads():
 
 
 def test_exactly_one_ucl_pi_is_required():
-    p = example("gaze")
+    p = example()
     p.team[0].is_pi = False
     assert any("exactly one" in i for i in check_project(p))
     p.team[0].is_pi = True
@@ -147,10 +149,12 @@ def test_exactly_one_ucl_pi_is_required():
 
 
 def test_safeguarding_people_are_named_in_i3():
-    a = answers(example("grimdark"))
-    assert "Dr Martin Dechant (Mental Health First Aider), Dr Maximilian Friehs (Clinician / clinical psychologist) are" in a["I3"]
-    assert "Dr Bettina Moltrecht (Clinician / clinical psychologist) is" in answers(example("meet"))["I3"]
-    assert "Safeguarding:" not in answers(example("gaze"))["I3"]
+    p = example()
+    assert "Dr Alex Example (Mental Health First Aider), Dr Sam Sample (Clinician / clinical psychologist) are" in answers(p)["I3"]
+    p.team[0].safeguarding_role = ""
+    assert "Dr Sam Sample (Clinician / clinical psychologist) is" in answers(p)["I3"]
+    p.team[1].safeguarding_role = ""
+    assert "Safeguarding:" not in answers(p)["I3"]
 
 
 def test_old_project_level_flags_move_to_the_pi():
@@ -161,14 +165,14 @@ def test_old_project_level_flags_move_to_the_pi():
 
 
 def test_dual_role_without_details_is_flagged():
-    p = example("gaze")
-    p.team[0].dual_role = True
+    p = example()
+    p.team[0].dual_role, p.team[0].dual_role_details = True, ""
     assert any("describe the dual role" in i for i in check_project(p))
 
 
 # ---------- questionnaires added by the user ----------
 def with_pis(**flags) -> Project:
-    p = example("gaze")
+    p = example()
     p.custom_instruments["pis"] = Instrument(name="Player Identification Scale (PIS)", citation="Downs et al., 2019",
                                              url="https://doi.org/10.0000/example",
                                              construct="identification with the player character", **flags)
@@ -222,7 +226,7 @@ def test_add_to_library_keeps_comments_and_loads(tmp_path, monkeypatch):
 
 # ---------- pre-screening survey as its own procedure ----------
 def screening_project(**kw) -> Project:
-    p = example("meet").model_dump()
+    p = example().model_dump()
     p["custom_tools"] = p["custom_tools"] + ["Screening questions.pdf"]
     p.update(screening_method="survey", screening_survey=["Screening questions.pdf", "phq8"], **kw)
     return Project.model_validate(p)
@@ -251,11 +255,11 @@ def test_screening_procedure_is_removed_and_never_duplicated():
 
 
 def test_screening_choice_is_checked():
-    p = example("meet")
+    p = example()
     p.screening_method = ""
     assert any("Choose how eligibility is checked" in i for i in check_project(p))
     p.screening_method, p.screening_details = "own", ""
     assert any("Describe your screening technique" in i for i in check_project(p))
     assert any("Choose or upload the pre-screening survey" in i
-               for i in check_project(Project.model_validate({**example("meet").model_dump(),
+               for i in check_project(Project.model_validate({**example().model_dump(),
                                                               "screening_method": "survey"})))

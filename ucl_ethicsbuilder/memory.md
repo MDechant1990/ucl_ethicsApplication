@@ -18,7 +18,7 @@ A Streamlit app that helps UCL researchers write a research ethics application f
   and **pre-fills** suggestions where it can.
 - Optionally it **fills a draft in ethics@ucl** through the user's own Chrome. It **never submits or signs**.
 
-Status: working prototype, **326 tests passing** (`pytest`). Not yet in its own git repository (see §10).
+Status: working prototype, **323 tests passing** (`pytest`). In its own private GitHub repository `ucl_ethicsApplication` (see §10).
 
 ---
 
@@ -27,14 +27,14 @@ Status: working prototype, **326 tests passing** (`pytest`). Not yet in its own 
 ```powershell
 python -m venv .venv
 .venv\Scripts\activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt   # requirements.txt = runtime only (used by Streamlit Cloud)
 streamlit run app.py          # http://localhost:8501
 pytest                        # all tests (~30 s)
 ```
 
 Known-good versions (Python 3.14.3): streamlit 1.67.0, pydantic 2.14.4, Jinja2 3.1.6, PyYAML 6.0.3,
-python-docx 1.2.0, pytest 9.2.0, playwright 1.65.2. `requirements.txt` is not pinned yet; pin these when
-creating the repository.
+python-docx 1.2.0, pytest 9.2.0, playwright 1.65.2. Pinned in `requirements.txt` (runtime) and
+`requirements-dev.txt` (+ pytest, playwright).
 
 Other entry points:
 
@@ -57,7 +57,7 @@ reloaded and the running app crashed with `TemplateNotFound` although the code o
 Data flow:
 
 ```
-app.py (UI, input only)  ──or──  project .yaml / examples/*.yaml
+app.py (UI, input only)  ──or──  project .yaml / examples/example.yaml
         │
         ▼
 model.py  Project            ← every fact entered once (single source of truth)
@@ -99,7 +99,7 @@ render.py + templating.py  →  templates/form/*.j2 (answers), templates/docs/*.
 | `filler/fill.py` | Draft creation, page walking, filling, saving (Save is in the "More" menu since late 2026) |
 | `filler/answers.py` | `build_plan()`: ordered (question, kind, value) actions; `MANUAL` list |
 | `filler/inventory.py` | Read-only form crawler (see §6) |
-| `examples/*.yaml` | Three approved applications as tool input: `gaze`, `grimdark`, `meet` |
+| `examples/example.yaml` | One fictional study (invented people/organisations) combining most features; the test fixture. Tests derive variants (UK-only, no industry partner, …) from it |
 | `tests/` | `test_generate.py` (rules/templates), `test_app.py` (UI via `AppTest`), `test_questions.py` (YAML vs. real form, conditions, suggestions), `test_inventory.py` (crawler parser), `test_guard.py` (no-submit guards) |
 
 ### How to change things (no code needed for most)
@@ -200,7 +200,7 @@ owned by the user; contains test answers on pages A/B; not submitted; can be del
 10. **Suggestions** (`suggest.py`, `templates/suggest/`): D3.2, C6, I6.1, E9 tick boxes; D3.1, D3.3, I2.1,
     I4, I4.2, I5, I5.1, I7.1, J6 text; J1.3.1 reuses the J1.1 number.
 11. **Structured screening (E2.2)**: dropdown, pre-screening survey → automatic procedure, own technique;
-    examples carry their approved E2.2 wording (from the PDFs) as "another technique".
+    the example uses "another technique".
 12. Procedure card redesign (title header, actions top right, new field order).
 13. **Hosted mode** + Dev Tunnel attempt (see §9).
 
@@ -229,8 +229,8 @@ Protocol, no therapeutic misconception, reflexivity, "benefits outweigh risks" s
 - Wording written by Claude (not from approved applications) needs review: `templates/suggest/*.j2`, in
   particular I2.1 ("UCL Employee Assistance Programme"), I7.1 ("UCL's safeguarding policy"), J6 ("CC BY 4.0").
 - Section-level conditions (§6) are unverified on the live form.
-- `requirements.txt` is unpinned; `examples/ethics_project.yaml` is an empty saved project (probably a test
-  save) – delete or keep deliberately.
+- The real applications (`gaze`, `grimdark`, `meet`) are kept only in the old local folder
+  `C:/GIT/ucl_ethicsbuilder/examples` and are never committed.
 
 ---
 
@@ -254,18 +254,14 @@ Protocol, no therapeutic misconception, reflexivity, "benefits outweigh risks" s
 
 ---
 
-## 10. Moving into its own repository
+## 10. Repository and hosting on Streamlit Community Cloud
 
-Currently `C:\GIT` is the git root (a large mixed repository) and **none of this project's files are tracked**.
-
-1. Copy `C:\GIT\ucl_ethicsbuilder` to the new location (or `git init` inside it).
-2. Check `.gitignore` – it excludes: `.venv/`, `__pycache__/`, `.pytest_cache/`, `.chrome-profile/`
-   (~950 MB browser profile with ethics@ucl session cookies), `filler/form_map_raw.json`, `Example_Ethics/`
-   (colleagues' real applications with names), `.idea/`, Office lock files `~$*`.
-3. **Do not commit** the real applications (`Example_Ethics/`), browser profiles, or saved projects with real
-   personal data. `examples/*.yaml` contain the names and UCL emails of the original applicants
-   (e.g. the PI of the Gaze study) – anonymise them before making a repository public.
-4. `filler/form_inventory.json` and `docs/form_inventory.md` contain only form text – fine to commit; they
-   drive `tests/test_questions.py`.
-5. Pin `requirements.txt` (versions in §2), recreate the venv, run `pytest` (expect 326 passed).
-6. Optional: add a `CLAUDE.md` with the "how to change things" rules from §3 for future AI-assisted work.
+- Private GitHub repository `ucl_ethicsApplication`; the app lives in `ucl_ethicsbuilder/`. `.gitignore` keeps out
+  `.venv/`, caches, `.chrome-profile/` (ethics@ucl session cookies), `filler/form_map_raw.json`,
+  `Example_Ethics/` (colleagues' real applications), `.idea/`, Office lock files.
+- **Never commit** real applications, browser profiles or saved projects with real personal data. The only
+  example is the fictional `examples/example.yaml`.
+- Streamlit Community Cloud (chosen 20 Nov 2026 for a quick test version): main file `ucl_ethicsbuilder/app.py`,
+  secret `ETHICS_HOSTED = "1"` (root-level secrets become environment variables), access by email invite.
+  US hosting -> test data only. Long-term hosting at UCL (§9) still open.
+- Before making the repository public: remove or trim this file (Dev Tunnel URL, test draft ID).
