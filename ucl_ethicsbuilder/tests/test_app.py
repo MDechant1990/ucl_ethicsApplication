@@ -42,6 +42,21 @@ def test_all_pages_render_with_the_example(uk_only):
         assert not at.exception, f"step {step + 1}: {at.exception}"
 
 
+def test_back_and_next_buttons_move_between_steps():
+    at = new_app()
+    assert not [b for b in at.button if b.key == "btn_back"]          # nothing before step 1
+    for step in range(1, N_STEPS):
+        at.button(key="btn_next").click().run()
+        assert not at.exception, at.exception
+        assert at.sidebar.radio[0].value.startswith(f"{step + 1}.")   # sidebar follows the buttons
+    assert not [b for b in at.button if b.key == "btn_next"]          # nothing after the last step
+    at.button(key="btn_back").click().run()
+    assert at.sidebar.radio[0].value.startswith(f"{N_STEPS - 1}.")
+    go(at, 2)                                                          # sidebar still works too
+    at.button(key="btn_next").click().run()
+    assert at.sidebar.radio[0].value.startswith("4.")
+
+
 def test_edit_flows_into_answers():
     at = new_app()
     load_example(at)

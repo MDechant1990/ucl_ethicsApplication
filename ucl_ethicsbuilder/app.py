@@ -164,7 +164,7 @@ with st.sidebar:
     if HOSTED:
         st.info("Test version. Please use made-up details. Nothing is kept on the server: use **Save project** "
                 "to keep your work.", icon=":material/science:")
-    step = st.radio("Step", STEPS, label_visibility="collapsed")
+    step = st.radio("Step", STEPS, key="step", label_visibility="collapsed")
     st.divider()
     if st.button("➕ New project", key="btn_new", width="stretch"):
         start_project(Project())
@@ -183,7 +183,15 @@ with st.sidebar:
     # Filled at the very end of the script, so the saved file includes edits made on this run.
     save_slot = st.empty()
 
+if st.session_state.get("shown_step") != step:      # step changed (sidebar or Back/Next): start at the top
+    if "shown_step" in st.session_state:
+        st.html(f"<script>/* {step} */ for (const el of [document.querySelector('[data-testid=\"stMain\"]'),"
+                " document.querySelector('section.main'), document.scrollingElement]) "
+                "{ if (el) el.scrollTo({top: 0}); }</script>", unsafe_allow_javascript=True)
+    st.session_state.shown_step = step
+
 st.header(step)
+st.caption(f"Step {STEPS.index(step) + 1} of {len(STEPS)}")
 
 # ---------- 1. Screening (A1–A4, B1) and the project itself (C1–C5, D1, I1) ----------
 if step == STEPS[0]:
@@ -575,6 +583,22 @@ elif step == STEPS[6]:
         for name, md in docs.items():
             with st.expander(name):
                 st.markdown(md)
+
+
+# ---------- Back / Next (bottom of every step; the sidebar list stays in sync) ----------
+def _go_to(index):
+    st.session_state.step = STEPS[index]      # runs before the sidebar radio is drawn on the next run
+
+
+_i = STEPS.index(step)
+st.divider()
+_back, _gap, _next = st.columns([2, 1, 2])
+if _i > 0:
+    _back.button(f"Back: {STEPS[_i - 1]}", key="btn_back", icon=":material/arrow_back:", width="stretch",
+                 on_click=_go_to, args=(_i - 1,))
+if _i < len(STEPS) - 1:
+    _next.button(f"Next: {STEPS[_i + 1]}", key="btn_next", icon=":material/arrow_forward:", width="stretch",
+                 icon_position="right", type="primary", on_click=_go_to, args=(_i + 1,))
 
 # ---------- sidebar save button (last, so it contains every edit from this run) ----------
 _saved = project()
