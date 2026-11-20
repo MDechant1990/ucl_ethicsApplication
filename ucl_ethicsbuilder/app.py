@@ -310,36 +310,80 @@ elif step == STEPS[2]:
     gen = st.session_state.get("gen", 0)
 
     def add_questionnaire(i, instr):
-        """Form to add a questionnaire that isn't in the list; it is selected in procedure i straight away."""
-        with st.popover("➕ Add a questionnaire that isn't listed", width="stretch"):
-            with st.form(f"add_instr_{i}", clear_on_submit=True, border=False):
-                name = st.text_input("Full name with abbreviation",
-                                     placeholder="Full name (ABBREVIATION)")
-                c1, c2 = st.columns(2)
-                citation = c1.text_input("Reference", placeholder="Author et al., Year")
-                url = c2.text_input("DOI or link", placeholder="https://doi.org/...")
-                construct = st.text_input("What it measures", placeholder="identification with the player character")
-                health = st.checkbox("Asks about health or mental health (special category data, J1.3)")
-                sensitive = st.checkbox("Asks about sensitive topics such as mood, anxiety or trauma (B2)")
-                to_library = False if HOSTED else st.checkbox(
-                    "Also add to the shared library (available in every project)", value=True)
-                if st.form_submit_button("Add questionnaire", type="primary"):
-                    if not name.strip():
-                        st.error("Enter the questionnaire's name.")
-                        return
-                    new = Instrument(name=name.strip(), citation=citation.strip(), url=url.strip(),
-                                     construct=construct.strip(), health=health, sensitive=sensitive)
-                    key = instrument_key(new.name, instr)
-                    p["custom_instruments"][key] = new.model_dump()
-                    procs[i]["instruments"].append(key)
-                    st.session_state.pop(f"w_phases.{i}.instruments", None)  # multiselect re-reads the project
-                    if to_library:
-                        add_to_library(key, new)
-                    st.rerun()
+        """Form to create a questionnaire that isn't in the list; it is selected in procedure i straight away."""
+        with st.form(f"add_instr_{i}", clear_on_submit=True, border=False):
+            name = st.text_input("Full name with abbreviation",
+                                 placeholder="Full name (ABBREVIATION)")
+            c1, c2 = st.columns(2)
+            citation = c1.text_input("Reference", placeholder="Author et al., Year")
+            url = c2.text_input("DOI or link", placeholder="https://doi.org/...")
+            construct = st.text_input("What it measures", placeholder="identification with the player character")
+            health = st.checkbox("Asks about health or mental health (special category data, J1.3)")
+            sensitive = st.checkbox("Asks about sensitive topics such as mood, anxiety or trauma (B2)")
+            to_library = False if HOSTED else st.checkbox(
+                "Also add to the shared library (available in every project)", value=True)
+            if st.form_submit_button("Add questionnaire", type="primary"):
+                if not name.strip():
+                    st.error("Enter the questionnaire's name.")
+                    return
+                new = Instrument(name=name.strip(), citation=citation.strip(), url=url.strip(),
+                                 construct=construct.strip(), health=health, sensitive=sensitive)
+                key = instrument_key(new.name, instr)
+                p["custom_instruments"][key] = new.model_dump()
+                procs[i]["instruments"].append(key)
+                st.session_state.pop(f"w_phases.{i}.tools", None)   # the list re-reads the project
+                if to_library:
+                    add_to_library(key, new)
+                st.rerun()
 
     def tool_pool():
         """All uploaded materials in this project (uploaded anywhere, selectable everywhere)."""
         return list(dict.fromkeys(p["custom_tools"] + [t for ph in procs for t in ph["custom_tools"]]))
+
+    def add_upload(i, files):
+        """Add newly uploaded files to procedure i (each upload once, so unticking a file later sticks)."""
+        seen = st.session_state.setdefault("seen_uploads", set())
+        fresh = [f for f in files or [] if f.file_id not in seen]
+        seen.update(f.file_id for f in fresh)
+        new = [f.name for f in fresh if f.name not in procs[i]["custom_tools"]]
+        if new:
+            procs[i]["custom_tools"] += new
+            p["custom_tools"] = list(dict.fromkeys(p["custom_tools"] + new))
+            st.session_state.pop(f"w_phases.{i}.tools", None)       # the list re-reads the project
+            st.rerun()
+
+    def tools_field(i, ph):
+        """One list for standardised questionnaires ("q:<key>") and uploaded materials ("f:<file name>"),
+        with an Add menu to upload a custom tool or create a new standardised questionnaire."""
+        instr = with_project_instruments(project(), LIB)["instruments"]
+        key = f"w_phases.{i}.tools"
+        if key not in st.session_state:
+            st.session_state[key] = [f"q:{k}" for k in ph["instruments"]] + [f"f:{t}" for t in ph["custom_tools"]]
+        options = [f"q:{k}" for k in instr] + [f"f:{t}" for t in tool_pool()]
+        options += [v for v in st.session_state[key] if v not in options]
+
+        def show(v):
+            kind, name = v.split(":", 1)
+            return instr.get(name, {}).get("name", name) if kind == "q" else f"📄 {name} (uploaded)"
+
+        c1, c2 = st.columns([5, 1], vertical_alignment="bottom")
+        chosen = c1.multiselect("Questionnaires and materials", options, key=key, format_func=show,
+                                help="Standardised questionnaires from the library, and your own uploaded "
+                                     "questionnaires, topic guides or tool descriptions. Missing one? Use Add.")
+        ph["instruments"] = [v[2:] for v in chosen if v.startswith("q:")]
+        ph["custom_tools"] = [v[2:] for v in chosen if v.startswith("f:")]
+        with c2.popover("Add", icon=":material/add:", width="stretch"):
+            what = st.segmented_control("Add", ["Upload custom tool", "Create new standardised questionnaire"],
+                                        default="Upload custom tool", key=f"add_kind_{i}",
+                                        label_visibility="collapsed")
+            if what == "Create new standardised questionnaire":
+                add_questionnaire(i, instr)
+            else:
+                add_upload(i, st.file_uploader("Your own questionnaires, topic guides or tool descriptions",
+                                               accept_multiple_files=True, key=f"up_{gen}_{i}"))
+        for k in ph["instruments"]:
+            if w := instr.get(k, {}).get("warning"):
+                st.warning(f"**{instr[k]['name']}**: {w}")
 
     number = 0
     for i, ph in enumerate(procs):
@@ -380,23 +424,7 @@ elif step == STEPS[2]:
 
             if ph["methods"]:
                 st.markdown("**Details for these methods**")
-                if any(LIB["methods"][m].get("questionnaires") for m in ph["methods"]) or ph["instruments"]:
-                    instr = with_project_instruments(project(), LIB)["instruments"]
-                    bind(st.multiselect, "Standardised questionnaires", f"phases.{i}.instruments",
-                         options=list(instr), format_func=lambda k: instr.get(k, {}).get("name", k))
-                    for key in ph["instruments"]:
-                        if w := instr.get(key, {}).get("warning"):
-                            st.warning(f"**{instr[key]['name']}**: {w}")
-                    add_questionnaire(i, instr)
-                files = st.file_uploader("Upload your own questionnaires, topic guides or tool descriptions",
-                                         accept_multiple_files=True, key=f"up_{gen}_{i}")
-                new = [f.name for f in files or [] if f.name not in ph["custom_tools"]]
-                if new:
-                    ph["custom_tools"] += new
-                    p["custom_tools"] = list(dict.fromkeys(p["custom_tools"] + new))
-                    st.session_state.pop(f"w_phases.{i}.custom_tools", None)
-                bind(st.multiselect, "Your uploaded materials used here", f"phases.{i}.custom_tools",
-                     options=tool_pool())
+                tools_field(i, ph)
 
             # 3. Duration and location
             c1, c2 = st.columns([1, 3])

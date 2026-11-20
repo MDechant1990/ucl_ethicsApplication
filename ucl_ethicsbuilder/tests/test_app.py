@@ -126,8 +126,28 @@ def test_uploaded_tool_is_reusable_in_other_procedures():
     at = new_app()
     load_example(at)
     go(at, 2)
-    pool = at.multiselect(key="w_phases.0.custom_tools").options
-    assert "Interview_Topic_Guide.pdf" in pool  # uploaded in procedure 2, offered in procedure 1
+    pool = at.multiselect(key="w_phases.0.tools").options
+    assert any("Interview_Topic_Guide.pdf" in o for o in pool)  # uploaded in procedure 2, offered in procedure 1
+    assert any("PHQ-8" in o for o in pool)                       # library questionnaires in the same list
+
+
+def test_one_list_for_questionnaires_and_materials():
+    at = new_app()
+    load_example(at)
+    go(at, 2)
+    tools = at.multiselect(key="w_phases.1.tools")                # Interviews: one uploaded topic guide
+    assert tools.value == ["f:Interview_Topic_Guide.pdf"]
+    tools.set_value(["f:Interview_Topic_Guide.pdf", "q:gad7"]).run()
+    ph = at.session_state.p["phases"][1]
+    assert ph["instruments"] == ["gad7"] and ph["custom_tools"] == ["Interview_Topic_Guide.pdf"]
+    assert not [t for t in at.multiselect if t.key == "w_phases.1.instruments"]   # no separate lists any more
+
+    uploader = [u for u in at.file_uploader if u.key and u.key.endswith("_1")][0]  # Add -> Upload custom tool
+    uploader.upload("Consent_script.pdf", b"%PDF").run()
+    assert "Consent_script.pdf" in at.session_state.p["phases"][1]["custom_tools"]
+    at.multiselect(key="w_phases.1.tools").set_value(["q:gad7"]).run()          # untick both files
+    assert at.session_state.p["phases"][1]["custom_tools"] == []                # the upload is not re-added
+    assert not at.exception, at.exception
 
 
 def team(at):
@@ -212,7 +232,8 @@ def library_copy(tmp_path, monkeypatch):
 
 
 def add_pis(at, to_library):
-    """Fill the 'Add a questionnaire' form of procedure 1 (its widgets have no keys, so find them by text)."""
+    """Add -> Create new standardised questionnaire in procedure 1 (form widgets have no keys: find them by text)."""
+    at.get_by_key("add_kind_0").set_value("Create new standardised questionnaire").run()
     [t for t in at.text_input if t.placeholder == "Full name (ABBREVIATION)"][0].set_value(
         "Player Identification Scale (PIS)")
     [t for t in at.text_input if t.placeholder == "Author et al., Year"][0].set_value("Downs et al., 2019")
@@ -231,7 +252,7 @@ def test_add_questionnaire_from_the_app(library_copy, to_library):
     p = at.session_state.p
     assert p["custom_instruments"]["pis"]["citation"] == "Downs et al., 2019"
     assert "pis" in p["phases"][0]["instruments"]
-    assert "pis" in at.multiselect(key="w_phases.0.instruments").value
+    assert "q:pis" in at.multiselect(key="w_phases.0.tools").value
     in_library = "pis:" in (library_copy / "instruments.yaml").read_text(encoding="utf-8")
     assert in_library == to_library
     go(at, 6)
