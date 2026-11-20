@@ -57,6 +57,30 @@ def test_back_and_next_buttons_move_between_steps():
     assert at.sidebar.radio[0].value.startswith("4.")
 
 
+def test_generate_page_documents_upload_and_edit_links():
+    at = new_app()
+    load_example(at)
+    go(at, 6)
+    assert not at.exception, at.exception
+    upload = at.button(key="btn_upload")
+    assert upload.disabled and upload.label == "Upload to Ethics@UCL"     # placeholder, not built yet
+    # every answer links back to a step (and only to steps that exist)
+    edits = [b for b in at.button if b.key and b.key.startswith("edit_")]
+    assert edits and all(b.label.startswith("Edit in ") for b in edits)
+    d2_1 = next(e for e in at.expander if "**D2.1**" in e.label)
+    d2_1.button[0].click().run()
+    assert at.sidebar.radio[0].value == "3. Study procedures"
+    assert not at.exception, at.exception
+
+
+def test_every_answer_knows_its_step():
+    from model import load_library, load_project
+    from render import render_answers
+    lib = load_library()
+    for a in render_answers(load_project(EXAMPLE), lib):
+        assert a["step"] in {"screening", "project", "team", "procedures", "population", "risk", "data"}, a["id"]
+
+
 def test_edit_flows_into_answers():
     at = new_app()
     load_example(at)
@@ -300,7 +324,7 @@ def test_hosted_mode_hides_the_filler_and_library_writes(monkeypatch):
     assert any("Test version" in i.value for i in at.sidebar.info)
     load_example(at)
     go(at, 6)
-    assert not [b for b in at.button if b.key == "btn_fill"]
-    assert any("only available when the tool runs on your own computer" in c.value for c in at.caption)
+    assert not [b for b in at.button if b.key in ("btn_fill", "btn_chrome")]
+    assert not [e for e in at.expander if "Fill a draft" in e.label]
     go(at, 2)
     assert not [c for c in at.checkbox if c.label.startswith("Also add to the shared library")]

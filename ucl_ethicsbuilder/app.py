@@ -28,6 +28,13 @@ LIB = load_library()
 HOSTED = os.environ.get("ETHICS_HOSTED") == "1"
 STEPS = ["1. Screening & project", "2. Research team", "3. Study procedures", "4. Population",
          "5. Risk check", "6. Data protection & pay", "7. Generate"]
+# Step keys used by library/questions.yaml and render.SOURCE_STEP -> index in STEPS.
+STEP_OF = {"screening": 0, "project": 0, "team": 1, "procedures": 2, "population": 3, "risk": 4, "data": 5}
+
+
+def go_to_step(index):
+    """Button callback: runs before the sidebar radio is drawn on the next run, so it may set its value."""
+    st.session_state.step = STEPS[index]
 
 if "p" not in st.session_state:
     st.session_state.p = Project().model_dump()
@@ -520,26 +527,66 @@ elif step == STEPS[5]:
     ask("data")
 
 
-# ---------- 6. Generate ----------
+# ---------- 7. Generate ----------
 elif step == STEPS[6]:
     proj = project()
     answers, docs = render_answers(proj, LIB), render_documents(proj, LIB)
     issues = check_project(proj) + check_questions(proj, LIB) + check_placeholders(answers, docs)
     if issues:
-        st.warning(f"**{len(issues)} item(s) to fix before submitting:**\n\n" + "\n".join(f"- {i}" for i in issues))
+        st.warning(f"**{len(issues)} item(s) to fix before submitting.** Open the list, fix them in the steps "
+                   "named, and come back here.", icon=":material/warning:")
+        with st.expander("Show the items to fix"):
+            st.markdown("\n".join(f"- {i}" for i in issues))
     else:
-        st.success("No issues found.")
+        st.success("No issues found.", icon=":material/check_circle:")
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.download_button("Answers (.md)", answers_markdown(answers), "ethics_answers.md")
-    for col, (name, md) in zip([c2, c3, c4], docs.items()):
-        col.download_button(f"{name} (.docx)", markdown_to_docx(md), f"{name.replace(' ', '_')}.docx")
+    # Placeholder for the direct connection to ethics@ucl (not built yet). Made large with CSS on its key class.
+    st.html("<style>.st-key-btn_upload button {min-height: 4.5rem; font-size: 1.25rem; font-weight: 600;}"
+            ".st-key-btn_upload button p {font-size: 1.25rem;}</style>")
+    st.button("Upload to Ethics@UCL", key="btn_upload", icon=":material/cloud_upload:", type="primary",
+              width="stretch", disabled=True,
+              help="Coming soon: send these answers straight into a draft application in ethics@ucl.")
+    st.caption("Coming soon: creates a draft in ethics@ucl with these answers. It will never submit or sign "
+               "for you. Until then, download the documents and copy the answers below.")
 
-    if HOSTED:
-        st.caption("Filling a draft in ethics@ucl automatically is only available when the tool runs on your "
-                   "own computer. Copy the answers below, or download them.")
-    else:
-        with st.expander("🤖 Fill a draft in ethics@ucl automatically (runs on this computer)"):
+    # ----- participant documents: first and most visible -----
+    st.subheader(":material/description: Participant documents")
+    st.caption("Generated from your answers. Download them as Word files, check them, and upload them to "
+               "ethics@ucl with your application.")
+    DOC_INFO = {
+        "Information sheet": ("info", "What the study involves, risks, data use and contacts."),
+        "Consent form": ("assignment_turned_in", "The statements participants agree to."),
+        "Debrief": ("volunteer_activism", "What participants receive at the end, with support contacts."),
+    }
+    for col, (name, md) in zip(st.columns(len(docs)), docs.items()):
+        icon, blurb = DOC_INFO.get(name, ("description", ""))
+        with col.container(border=True, height="stretch"):
+            st.markdown(f"**:material/{icon}: {name}**")
+            st.download_button("Download (.docx)", markdown_to_docx(md), f"{name.replace(' ', '_')}.docx",
+                               key=f"dl_{name}", icon=":material/download:", width="stretch")
+            st.caption(blurb)
+    with st.expander("Preview the documents"):
+        for tab, md in zip(st.tabs(list(docs)), docs.values()):
+            tab.markdown(md)
+
+    # ----- form answers: second, each linked to the step it comes from -----
+    st.subheader(":material/list_alt: Form answers")
+    head, dl = st.columns([3, 1], vertical_alignment="center")
+    head.caption("In the order ethics@ucl asks them. Copy each answer into the form, or use **Edit** to go to "
+                 "the step where it comes from.")
+    dl.download_button("All answers (.md)", answers_markdown(answers), "ethics_answers.md", key="dl_answers",
+                       icon=":material/download:", width="stretch")
+    for n, a in enumerate(answers):
+        source = STEP_OF.get(a.get("step"))
+        with st.expander(f"**{a['id']}** – {a['title']}"):
+            if source is not None:
+                st.button(f"Edit in {STEPS[source]}", key=f"edit_{n}", icon=":material/edit:", type="tertiary",
+                          on_click=go_to_step, args=(source,))
+            st.code(a["text"], language=None, wrap_lines=True)
+
+    # ----- the local filler (only when running on your own computer) -----
+    if not HOSTED:
+        with st.expander("🤖 Fill a draft in ethics@ucl from this computer (local version only)"):
             st.markdown(
                 "1. Click **Open Chrome for ethics@ucl** and log in in the new window (first time only).\n"
                 "2. Create a new draft, or enter the number of an existing draft (from its URL, "
@@ -554,7 +601,7 @@ elif step == STEPS[6]:
                               label_visibility="collapsed")
             number = c3.text_input("Draft number", key="fill_number", disabled=target == "Create new draft")
             overwrite = st.checkbox("Overwrite text already in the draft", key="fill_overwrite")
-            if st.button("Fill draft now", key="btn_fill", type="primary",
+            if st.button("Fill draft now", key="btn_fill",
                          disabled=target == "Existing draft" and not number.strip().isdigit()):
                 tmp = Path(tempfile.gettempdir()) / "ethics_builder_fill.yaml"
                 tmp.write_text(dump_project(proj), encoding="utf-8")
@@ -564,7 +611,7 @@ elif step == STEPS[6]:
                 out, lines = st.empty(), []
                 with subprocess.Popen(cmd, cwd=Path(__file__).parent, stdout=subprocess.PIPE,
                                       stderr=subprocess.STDOUT, text=True, encoding="utf-8",
-                                      env={**__import__("os").environ, "PYTHONIOENCODING": "utf-8"}) as proc:
+                                      env={**os.environ, "PYTHONIOENCODING": "utf-8"}) as proc:
                     for line in proc.stdout:
                         lines.append(line.rstrip())
                         out.code("\n".join(lines[-40:]), language=None)
@@ -574,31 +621,17 @@ elif step == STEPS[6]:
                     st.error("The filler stopped with an error. Is Chrome open and are you logged in?")
                 out.code("\n".join(lines), language=None)
 
-    tab_form, tab_docs = st.tabs(["Form answers (copy into ethics@ucl)", "Participant documents"])
-    with tab_form:
-        for a in answers:
-            with st.expander(f"**{a['id']}** – {a['title']}"):
-                st.code(a["text"], language=None, wrap_lines=True)
-    with tab_docs:
-        for name, md in docs.items():
-            with st.expander(name):
-                st.markdown(md)
-
 
 # ---------- Back / Next (bottom of every step; the sidebar list stays in sync) ----------
-def _go_to(index):
-    st.session_state.step = STEPS[index]      # runs before the sidebar radio is drawn on the next run
-
-
 _i = STEPS.index(step)
 st.divider()
 _back, _gap, _next = st.columns([2, 1, 2])
 if _i > 0:
     _back.button(f"Back: {STEPS[_i - 1]}", key="btn_back", icon=":material/arrow_back:", width="stretch",
-                 on_click=_go_to, args=(_i - 1,))
+                 on_click=go_to_step, args=(_i - 1,))
 if _i < len(STEPS) - 1:
     _next.button(f"Next: {STEPS[_i + 1]}", key="btn_next", icon=":material/arrow_forward:", width="stretch",
-                 icon_position="right", type="primary", on_click=_go_to, args=(_i + 1,))
+                 icon_position="right", type="primary", on_click=go_to_step, args=(_i + 1,))
 
 # ---------- sidebar save button (last, so it contains every edit from this run) ----------
 _saved = project()

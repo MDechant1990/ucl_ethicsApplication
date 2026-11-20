@@ -50,6 +50,18 @@ QUESTIONS = [
     ("J7", "End of project", "J7.j2"),
 ]
 
+# Where in the app the facts behind each generated answer are entered (step keys as in library/questions.yaml,
+# plus "team"). Lets the Generate page link every answer back to the step that changes it.
+SOURCE_STEP = {
+    "A5": "team", "B1.2/B2": "risk", "C1–C6": "project", "C7.1": "team", "C8.1": "team", "D1": "project",
+    "D2": "procedures", "D2.1": "procedures", "D4": "procedures", "D4.1": "procedures",
+    "E1": "population", "E2": "population", "E2.2": "population", "E3.1": "population", "E4": "population",
+    "E5": "population", "E6.1": "data", "E8.2": "data", "E8.3": "population", "E10": "data", "E11": "data",
+    "E12": "data", "E13": "data", "E14": "data", "I1": "project", "I1.1": "risk", "I3": "team", "I10": "risk",
+    "J1.1": "data", "J1.2": "data", "J1.2.1": "data", "J1.3/J1.4": "data", "J1.5.1": "data", "J1.6": "data",
+    "J2": "data", "J3": "data", "J4": "data", "J7": "data",
+}
+
 DOCUMENTS = {
     "Information sheet": "information_sheet.md.j2",
     "Consent form": "consent_form.md.j2",
@@ -61,10 +73,11 @@ def render_answers(p: Project, lib) -> list[dict]:
     lib = with_project_instruments(p, lib)
     env, d = _env(lib), derive(p, lib)
     generated = [
-        {"id": qid, "title": title, "text": env.get_template(f"form/{tpl}").render(p=p, d=d).strip()}
+        {"id": qid, "title": title, "text": env.get_template(f"form/{tpl}").render(p=p, d=d).strip(),
+         "step": SOURCE_STEP[qid]}
         for qid, title, tpl in QUESTIONS
     ]
-    asked = [{"id": q["number"], "title": q["title"], "text": as_text(q["value"])}
+    asked = [{"id": q["number"], "title": q["title"], "text": as_text(q["value"]), "step": q["step"]}
              for q in applicable(p, lib) if q["value"] not in EMPTY]
     return generated + asked
 
