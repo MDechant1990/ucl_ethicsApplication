@@ -1,0 +1,40 @@
+# vulnerable: true   -> B2 "Vulnerability" (high-risk review)
+# borderline: true   -> flag; `justification` goes into I1.1, `mitigations` into the risk list
+healthy_adults:
+  label: Healthy adults (general public)
+ucl_students:
+  label: UCL students
+  note: >-
+    Researchers will not recruit, test or interview students they currently teach, assess or supervise. Where course
+    credit is offered, an alternative non-research activity of equal value is available.
+gamers:
+  label: Gaming / online hobby communities
+  note: >-
+    Recruitment posts follow community rules and are approved by moderators where required. Venue or community partners
+    only share the advert and are not involved in consent or data collection.
+professionals:
+  label: Experts / professionals (practitioners, designers, researchers)
+  note: >-
+    Experts are invited by personalised professional email with the information sheet attached; no approaches are made
+    through personal social media accounts.
+neurodivergent:
+  label: Neurodivergent adults
+  borderline: true
+  justification: >-
+    Neurodivergent adults are not considered vulnerable by default. Participants are adults who can give informed consent;
+    disclosure of neurodivergence is self-identified and optional (yes/no only, no diagnostic details required), and the
+    study follows the INCLUDE principles for inclusive research.
+  mitigations:
+    - risk: Sensory or cognitive burden during sessions
+      mitigation: Sessions offer multiple formats (remote, in-person, written), sensory-aware rooms and built-in breaks.
+    - risk: Pressure to disclose neurodivergent status or personal experiences
+      mitigation: Disclosure is optional (yes/no only) and participants can skip any question.
+clinical:
+  label: People with a current mental or physical health condition
+  vulnerable: true
+under_16:
+  label: Children under 16
+  vulnerable: true
+adults_lacking_capacity:
+  label: Adults who may lack capacity to consent
+  vulnerable: true

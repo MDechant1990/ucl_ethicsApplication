@@ -1,0 +1,11 @@
+All participants are aged {{ p.min_age }} or over. Informed consent is obtained before any data collection, after participants have received the information sheet ({{ p.decision_time }} in advance) and had the chance to ask questions.
+{% if not d.in_person or (d.locations | selectattr("key", "equalto", "online") | list) %}
+Online activities: consent is taken electronically in Qualtrics. Consent statements must each be ticked to proceed, and consent is recorded with a timestamp; participants who do not consent are taken to the end and no data are recorded.
+{% endif %}
+{% if d.in_person %}
+In-person activities: the researcher goes through the information sheet and the participant completes {% if p.paper_consent %}a paper consent form (or a digital form on a tablet){% else %}an electronic consent form on a tablet or computer{% endif %} before the activity starts.
+{% endif %}
+{% if d.has_audio %}
+For recorded sessions, consent includes consent to audio recording; the researcher confirms verbally at the start of the recording that the participant is still happy to take part.
+{% endif %}
+Consent records are stored separately from study data.

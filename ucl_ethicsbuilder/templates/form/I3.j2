@@ -1,0 +1,9 @@
+{% for r in d.team if r.experience %}
+- {{ r.full_name }}: {{ r.experience }}
+{% else %}
+[Describe the team's relevant experience.]
+{% endfor %}
+{% if p.safeguarding %}
+Safeguarding: {% for r in p.safeguarding_team %}{{ r.full_name }} ({{ r.safeguarding_role.split(" (")[0] }}){% if not loop.last %}, {% endif %}{% endfor %} {{ "is" if p.safeguarding_team | length == 1 else "are" }} responsible for participant wellbeing, {{ "is" if p.safeguarding_team | length == 1 else "are" }} present at in-person sessions to respond to distress, and follow the project's safeguarding protocol for unexpected disclosures.
+{% endif %}
+All team members complete UCL research ethics and data protection training. Researchers running sessions are trained by the PI in the procedures and in supporting participants who become upset, and students are supervised by the PI throughout data collection.

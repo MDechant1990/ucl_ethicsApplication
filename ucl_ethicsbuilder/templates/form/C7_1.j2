@@ -1,0 +1,5 @@
+{% for r in p.ucl_team %}
+{{ r.full_name }} ({{ r.email }}), {{ r.department }}: {{ r.role }}
+{% else %}
+No additional UCL researchers.
+{% endfor %}

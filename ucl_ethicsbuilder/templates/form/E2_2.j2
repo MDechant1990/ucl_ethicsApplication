@@ -1,0 +1,23 @@
+{# E2.2: how eligibility is checked, generated from the screening box on the Population step. #}
+{% set criteria %}
+{% if p.inclusion %}
+- Inclusion: {{ p.inclusion | join("; ") }}
+{% endif %}
+{% if d.exclusions %}
+- Exclusion: {{ d.exclusions | join("; ") }}
+{% endif %}
+{% endset %}
+{% set not_eligible %}People who are not eligible are thanked and told that they cannot take part in this study, without being told which answer excluded them. Screening answers are kept only as long as needed to confirm eligibility.{% endset %}
+{% if p.screening_method == "own" %}
+{{ p.screening_details or "[Describe how you identify and screen eligible participants, and what people who are not eligible are told.]" }}
+{% elif p.screening_method == "survey" %}
+Before taking part, people complete a short online pre-screening survey ({{ d.screening_tools | join(", ") or "[choose or upload the screening survey]" }}, about 5 minutes) covering the eligibility criteria in E2:
+{{ criteria }}
+{{ not_eligible }}
+{% elif p.screening_method == "self_declaration" %}
+Before the study starts, participants confirm that they meet each eligibility criterion in E2 (yes/no), and the researcher checks this again at the start of {{ "each session" if d.in_person else "the study" }}:
+{{ criteria }}
+{{ not_eligible }}
+{% else %}
+[Choose how eligibility is checked on the Population step.]
+{% endif %}

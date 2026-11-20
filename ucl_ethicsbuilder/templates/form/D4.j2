@@ -1,0 +1,8 @@
+{% for loc in d.locations %}
+{{ loc.label }}: {{ loc.d4 }}
+{% set venues = p.phases | selectattr("location", "equalto", loc.key) | map(attribute="lab_location") | select | list %}
+{% if venues %}
+Venue(s): {{ venues | join("; ") }}.
+{% endif %}
+
+{% endfor %}

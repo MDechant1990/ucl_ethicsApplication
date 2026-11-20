@@ -1,0 +1,4 @@
+Participants are recruited through {{ d.channels_text }}. Recruitment materials identify the study as UCL research, briefly describe what taking part involves, and link to the participant information sheet. Participants self-select; no individuals are approached directly unless invited as experts.
+{% for c in d.channels if c.note %}
+- {{ c.label }}: {{ c.note }}
+{% endfor %}

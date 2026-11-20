@@ -1,0 +1,73 @@
+# Standardised instruments. health: counts as special category "data concerning health".
+# sensitive: triggers the B2 "Sensitivity" borderline flag.  warning: shown to the applicant.
+pss10:
+  name: Perceived Stress Scale (PSS-10)
+  citation: Cohen et al., 1983
+  url: https://doi.org/10.2307/2136404
+  construct: perceived stress
+  health: true
+  sensitive: false
+wemwbs:
+  name: Warwick-Edinburgh Mental Wellbeing Scale (WEMWBS)
+  citation: Tennant et al., 2007
+  url: https://doi.org/10.1186/1477-7525-5-63
+  construct: general mental well-being
+  health: true
+  sensitive: false
+phq8:
+  name: Patient Health Questionnaire (PHQ-8)
+  citation: Kroenke et al., 2009
+  url: https://doi.org/10.1016/j.jad.2008.06.026
+  construct: depressive symptoms (non-diagnostic, group level only; PHQ-8 avoids the self-harm item of the PHQ-9)
+  health: true
+  sensitive: true
+phq9:
+  name: Patient Health Questionnaire (PHQ-9)
+  citation: Kroenke et al., 2001
+  url: https://doi.org/10.1046/j.1525-1497.2001.016009606.x
+  construct: depressive symptoms
+  health: true
+  sensitive: true
+  warning: Item 9 asks about thoughts of self-harm. Use the PHQ-8 instead, or add a safeguarding/risk protocol (likely high-risk review).
+gad7:
+  name: Generalised Anxiety Disorder scale (GAD-7)
+  citation: Spitzer et al., 2006
+  url: https://doi.org/10.1001/archinte.166.10.1092
+  construct: anxiety symptoms (non-diagnostic, group level only)
+  health: true
+  sensitive: true
+panas:
+  name: Positive and Negative Affect Schedule (PANAS)
+  citation: Watson et al., 1988
+  url: https://doi.org/10.1037/0022-3514.54.6.1063
+  construct: momentary affect
+  health: false
+  sensitive: false
+stai6:
+  name: State-Trait Anxiety Inventory short form (STAI-6)
+  citation: Marteau & Bekker, 1992
+  url: https://doi.org/10.1111/j.2044-8260.1992.tb00997.x
+  construct: momentary state anxiety
+  health: true
+  sensitive: false
+lsas:
+  name: Liebowitz Social Anxiety Scale (LSAS-SR)
+  citation: Baker et al., 2002
+  url: https://doi.org/10.1017/s0033291798007879
+  construct: social anxiety
+  health: true
+  sensitive: true
+ssq:
+  name: Simulator Sickness Questionnaire (SSQ)
+  citation: Kennedy et al., 1993
+  url: https://doi.org/10.1207/s15327108ijap0303_3
+  construct: simulator sickness after VR exposure
+  health: true
+  sensitive: false
+sus:
+  name: System Usability Scale (SUS)
+  citation: Brooke, 1996
+  url: ""
+  construct: perceived usability
+  health: false
+  sensitive: false

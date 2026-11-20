@@ -1,0 +1,19 @@
+Participants are compensated at £{{ "%.2f" | format(p.rate_per_hour) }} per hour (pro rata, rounded up to the nearest 50p), paid {{ p.payment_method }}{% if p.course_credit %}, or course credit through SONA{% endif %}:
+{% for c in d.compensation %}
+- {{ c.procedure }} (up to {{ c.minutes }} min): {{ c.amount }}
+{% endfor %}
+{% if p.in_kind %}
+In addition, participants receive {{ p.in_kind }}.
+{% endif %}
+{% if p.prize %}
+Prize: {{ p.prize }}. This follows the conventions of the activity and is described in the information sheet.
+{% endif %}
+{% if p.travel_expenses %}
+Reasonable travel expenses are reimbursed on receipt, to remove financial barriers to taking part.
+{% endif %}
+{% if p.pay_on_withdrawal == "full" %}
+Compensation is paid in full even if participants withdraw or stop early.
+{% else %}
+Participants who withdraw during an activity are compensated pro rata for the time they took part.
+{% endif %}
+Each activity is compensated independently; taking part in one is not required to be paid for another.

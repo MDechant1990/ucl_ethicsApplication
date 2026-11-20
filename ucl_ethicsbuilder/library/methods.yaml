@@ -1,0 +1,162 @@
+# Reusable method descriptions (wording taken from approved applications).
+# d2: the matching checkbox in ethics@ucl question D2.
+survey:
+  label: Survey / questionnaires
+  questionnaires: true
+  d2: Survey/ questionnaire(s)
+  description: >-
+    Participants complete standardised self-report questionnaires online (Qualtrics, under UCL's licence) or in the lab.
+  data_types: [Survey responses]
+  identifiers: [Demographic information (age, gender, education)]
+  exclusions: []
+  risks: []
+
+interview:
+  label: Semi-structured interview
+  d2: Interviews (semi-structured or unstructured)
+  description: >-
+    Participants reflect on their experiences in a semi-structured interview following the uploaded topic guide.
+    Interviews are audio recorded (online via Microsoft Teams under UCL's licence, or on an encrypted UCL device),
+    transcribed by the research team with identifying details removed, and recordings are deleted after transcription.
+  data_types: [Interview audio recordings, Anonymised interview transcripts]
+  identifiers: [Audio recordings (voice)]
+  audio: true
+  exclusions: []
+  risks: []
+
+focus_group:
+  label: Focus group / co-design workshop
+  d2: Focus groups
+  description: >-
+    Small groups of participants discuss the topic and co-design ideas in a facilitated session following the uploaded
+    topic guide. Sessions are audio recorded and transcribed with identifying details removed.
+  data_types: [Focus group audio recordings, Anonymised transcripts, Workshop artefacts (notes, sketches)]
+  identifiers: [Audio recordings (voice)]
+  audio: true
+  exclusions: []
+  risks:
+    - risk: Confidentiality within the group cannot be fully guaranteed
+      mitigation: Participants agree ground rules at the start, are asked not to share what others said, and are advised not to disclose information they would not want others to know.
+
+eye_tracking:
+  label: Eye tracking (screen-based)
+  d2: Behavioural or cognitive testing
+  description: >-
+    Eye movements are recorded with stationary screen-based eye trackers (e.g. Tobii, 250 Hz+). Each recording begins with
+    the manufacturer's standard calibration. Measures include fixations, saccades, blinks, pupil diameter and dwell time on
+    areas of interest. Eye trackers are non-invasive and use low-intensity infrared light; only gaze coordinates and pupil
+    measures are stored, not eye or face video.
+  data_types: [Gaze data (gaze position, fixations, blinks, pupil size)]
+  identifiers: []
+  lab: true
+  exclusions:
+    - Eye conditions affecting eye tracking (e.g. strabismus, amblyopia, nystagmus, recent eye surgery)
+    - Wearing varifocal or bifocal lenses
+  risks:
+    - risk: Eye strain or fatigue
+      mitigation: Recordings are kept short with breaks, and participants can pause or stop at any time.
+
+vr:
+  label: Virtual reality (VR headset)
+  questionnaires: true
+  d2: Non-clinical procedure or intervention
+  description: >-
+    Participants explore a virtual environment using a consumer VR headset (e.g. HTC Vive Pro Eye), with integrated eye
+    tracking where applicable. Exposure is kept short and simulator sickness is monitored with the Simulator Sickness
+    Questionnaire (SSQ). Headsets are cleaned between participants.
+  data_types: [VR interaction logs (head movements, controller input)]
+  identifiers: []
+  lab: true
+  exclusions:
+    - History of epilepsy, seizures or photosensitivity
+    - High susceptibility to motion sickness
+    - Pregnancy, balance or heart conditions
+  risks:
+    - risk: Simulator (motion) sickness
+      mitigation: Short exposure, SSQ monitoring, and participants can remove the headset at any time; a researcher is present throughout.
+    - risk: Collision or tripping while wearing a headset
+      mitigation: Sessions take place in a cleared play area and the researcher supervises at all times.
+
+behavioural_task:
+  label: Digital task / game
+  questionnaires: true
+  d2: Behavioural or cognitive testing
+  description: >-
+    Participants complete a short digital task, such as playing a custom-made game or a relaxation exercise. Software
+    automatically logs performance (scores, errors, completion times), reaction times and interaction events.
+  data_types: [Behavioural task data (scores, reaction times, interaction logs)]
+  identifiers: []
+  exclusions:
+    - History of epilepsy, seizures or photosensitivity
+  risks:
+    - risk: Photosensitivity
+      mitigation: People with epilepsy or photosensitivity are excluded and tasks avoid flashing lights.
+
+co_design:
+  label: Co-design workshop
+  d2: Focus groups
+  description: >-
+    Participants (e.g. community members, practitioners and designers) collaboratively develop ideas and design concepts in
+    a facilitated workshop following the uploaded topic guide. Discussions are audio recorded with consent; workshop
+    artefacts (notes, sketches, drafts) are collected without names. Breaks are built into longer sessions.
+  data_types: [Workshop audio recordings, Anonymised transcripts, Co-design artefacts (notes, sketches, draft materials)]
+  identifiers: [Audio recordings (voice)]
+  audio: true
+  exclusions: []
+  risks:
+    - risk: Time burden of longer workshops
+      mitigation: Session length is stated in advance, breaks are built in, and participants can leave at any time.
+    - risk: Confidentiality within the group cannot be fully guaranteed
+      mitigation: Ground rules are agreed at the start and participants are asked not to share what others said.
+
+creative_workshop:
+  label: Creative / hobby-based workshop (e.g. co-painting, play session)
+  d2: Focus groups
+  description: >-
+    Researchers and participants take part in a shared creative activity (e.g. painting miniatures or playing a game)
+    that facilitates naturalistic conversation in a relaxed, hobby-centred setting. Participants are invited to reflect on
+    the activity and share ideas. Discussions are audio recorded with consent.
+  data_types: [Workshop audio recordings, Anonymised transcripts]
+  identifiers: [Audio recordings (voice)]
+  audio: true
+  exclusions: []
+  risks: []
+
+observation:
+  label: Observation with field notes (no recording)
+  d2: Observations in private/ closed settings e.g., workplaces, classrooms, participant homes
+  description: >-
+    Researchers observe a structured activity and a facilitated group review. This element is not audio or video recorded;
+    researchers take contemporaneous written notes without names or identifying details.
+  data_types: [Researcher field notes (no names)]
+  identifiers: []
+  exclusions: []
+  risks: []
+
+expert_interview:
+  label: Expert / stakeholder interview
+  d2: Interviews (semi-structured or unstructured)
+  description: >-
+    Expert stakeholders (e.g. practitioners, designers, researchers) are interviewed about their professional experience
+    following the uploaded topic guide. Interviews are audio recorded with consent and transcribed with identifying details
+    removed; experts are only named in outputs if they explicitly agree.
+  data_types: [Interview audio recordings, Anonymised interview transcripts]
+  identifiers: [Audio recordings (voice), Professional role and organisation]
+  audio: true
+  exclusions: []
+  risks: []
+
+field_deployment:
+  label: Prototype deployment / field evaluation
+  questionnaires: true
+  d2: Non-clinical procedure or intervention
+  description: >-
+    A prototype developed in the project is deployed in a real setting (e.g. a team workspace) and evaluated through
+    pre- and post-deployment interviews, usability questionnaires and usage data. The prototype is checked for safety
+    before deployment and can be removed at any time.
+  data_types: [Prototype usage data, Usability questionnaire responses]
+  identifiers: []
+  exclusions: []
+  risks:
+    - risk: Physical discomfort or malfunction of the prototype
+      mitigation: Prototypes are safety-checked before deployment, the research team can be contacted at any time, and participants can stop using the prototype without giving a reason.

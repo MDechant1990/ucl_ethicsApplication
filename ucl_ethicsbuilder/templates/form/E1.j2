@@ -1,0 +1,12 @@
+a) Projected sample size(s)
+{% for ph in p.study_phases %}
+- {{ ph.name }}: {{ ph.sample_size }} participants
+{% endfor %}
+
+b) Justification
+{% for ph in p.study_phases %}
+- {{ ph.name }}: {{ ph.sample_justification or "[add power analysis or field standard]" }}
+{% endfor %}
+
+c) Age limits
+{{ p.min_age }}–{{ p.max_age }} years. {{ p.age_justification }}

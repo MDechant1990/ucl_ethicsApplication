@@ -1,0 +1,6 @@
+{% for c in d.considerations %}
+{{ c.title }}: {{ c.text }}
+
+{% else %}
+No further issues identified.
+{% endfor %}

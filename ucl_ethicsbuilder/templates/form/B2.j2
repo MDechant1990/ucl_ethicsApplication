@@ -1,0 +1,6 @@
+Suggested review route: {{ d.risk_level | upper }} RISK
+{% for f in d.flags if f.code in ["B1.2", "B2"] %}
+- ({{ f.level }}) {{ f.message }}
+{% else %}
+- None of the above
+{% endfor %}

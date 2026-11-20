@@ -1,0 +1,18 @@
+# Debrief
+
+Thank you for taking part in **{{ p.title }}**.
+
+**What was this study about?** {{ p.aims or "[Short plain-language explanation.]" }}
+
+**Your participant number:** ____________
+Keep this number. If you want your data deleted, email {{ p.pi.email }} with this number within {{ p.withdrawal }}.
+
+**Support**
+If taking part has raised any concerns about your well-being, you can contact:
+- Your GP or NHS 111
+- Samaritans: 116 123 (free, 24/7), https://www.samaritans.org
+- Mind: https://www.mind.org.uk
+- UCL Student Support and Wellbeing (UCL students): https://www.ucl.ac.uk/students/support-and-wellbeing
+{% if p.collect_abroad %}
+- [Add equivalent support services for the overseas site.]
+{% endif %}

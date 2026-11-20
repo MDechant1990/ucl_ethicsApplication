@@ -1,0 +1,25 @@
+Potential risks and how they are managed:
+{% for r in d.risks %}
+- {{ r.risk }}: {{ r.mitigation }}
+{% endfor %}
+{% if d.sensitive_instruments %}
+- Sensitive questions ({{ d.sensitive_instruments | map(attribute="name") | join(", ") }}): participants can skip any question, the measures are not used for diagnosis, and support services are listed on the debrief sheet.
+{% endif %}
+{% if d.has_audio %}
+- Emotional discomfort when discussing personal experiences: participants can skip questions, take breaks or stop at any time; support resources are signposted{% if p.safeguarding %}, and a named team member with safeguarding responsibility (see I3) is present, with a safeguarding protocol in place for unexpected disclosures{% endif %}.
+{% endif %}
+- Time burden: time commitments are stated in advance and each activity is independent.
+- Data privacy: data are stored under participant numbers{% if d.has_audio %}, audio is deleted after transcription{% endif %}, and identifying details (e.g. employer names) are removed from quotes.
+
+Why this is {{ d.risk_level }} risk:
+{% if d.risk_level == "low" %}Participants are adults who can give informed consent. {% endif %}All methods are non-invasive and standard in human-computer interaction research{% if not p.deception %}, there is no deception{% endif %}, and participants can stop at any time.
+{% if d.sensitive_instruments or d.borderline_populations %}
+
+Why borderline issues are not high risk:
+{% for pop in d.borderline_populations %}
+{{ pop.justification }}
+{% endfor %}
+{% if d.sensitive_instruments %}
+The well-being questionnaires are widely used with the general public and capture everyday, non-clinical variation; they are not used for diagnosis.
+{% endif %}
+{% endif %}

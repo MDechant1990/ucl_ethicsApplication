@@ -1,0 +1,31 @@
+# Consent Form
+
+**Title of study:** {{ p.title }}
+**Principal Investigator:** {{ p.pi.full_name }} ({{ p.pi.email }})
+
+Please tick each box to confirm:
+
+- [ ] I have read and understood the information sheet and have had the chance to ask questions.
+- [ ] I confirm that I am aged {{ p.min_age }} or over and meet the eligibility criteria described in the information sheet.
+- [ ] I understand that taking part is voluntary and that I can stop at any time without giving a reason.
+- [ ] I understand that I can withdraw my data up to {{ p.withdrawal }} after taking part, after which it will be anonymised and cannot be removed.
+- [ ] I understand that my data will be stored securely and handled in line with UK data protection law{% if d.data_recipients %}, and that pseudonymised data will be accessed by the named partner institution(s){% endif %}.
+{% if d.special_category %}
+- [ ] I consent to the processing of {% if "ethnicity" in p.demographics %}my ethnicity and {% endif %}information about my health and well-being as described in the information sheet.
+{% endif %}
+{% if d.has_audio %}
+- [ ] I consent to being audio recorded. I understand the recording will be deleted after transcription.
+- [ ] (Optional) I agree that anonymised quotes may be used in publications.
+{% endif %}
+{% if d.methods | selectattr("key", "in", ["focus_group", "co_design", "creative_workshop"]) | list %}
+- [ ] I agree to keep what other participants say in group sessions confidential.
+{% endif %}
+{% if p.open_data %}
+- [ ] I agree that my anonymised data may be shared with other researchers via a data repository.
+{% endif %}
+- [ ] (Optional) I would like to receive a summary of the findings.
+- [ ] I agree to take part in this study.
+
+Participant name: ______________________  Date: __________  Signature: ______________
+
+Researcher name: ______________________  Date: __________  Signature: ______________

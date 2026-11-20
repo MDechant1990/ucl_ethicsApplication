@@ -1,0 +1,1135 @@
+# Questions the tool asks directly (everything the templates cannot derive), keyed by ethics@ucl number.
+# Generated once from filler/form_inventory.json; maintained by hand from now on.
+#   section:  group shown together in the app; a section's `when` must hold for any of its questions
+#   kind:     yes_no | choice | multi | text | textarea   (options = the form's exact labels)
+#   when:     list of alternatives; each maps a form question to accepted option labels (prefix match).
+#             Conditions refer to the form's own answers (A1, B1, B2, D3... derived by rules.form_choices)
+#             or to other questions in this file. Taken from the form's rules except where noted in WHEN.
+#   hint:     what a good answer covers (shown as help in the app)
+#   manual:   asked because it opens follow-ups, but a commitment the applicant ticks themselves
+sections:
+  external_review:
+    title: Sponsor and existing ethics reviews (A2–A4)
+    step: screening
+  about:
+    title: About your research (B1)
+    step: screening
+  project_details:
+    title: Related projects, funding and conflicts of interest (C4–C6)
+    step: project
+  design:
+    title: Study design (D2)
+    step: procedures
+  overseas:
+    title: Research outside the UK (D3)
+    step: procedures
+  location:
+    title: Location permissions (D4)
+    step: procedures
+  secondary_data:
+    title: Existing or secondary data (section G)
+    step: procedures
+    when:
+    - B1:
+      - My research involves use of secondary/ existing data derived from or about people
+  human_tissue:
+    title: Human tissue (section F)
+    step: procedures
+    when:
+    - B1:
+      - My research involves use of 'relevant material' as defined by the Human Tissue Act
+  consent:
+    title: Consent (E8)
+    step: population
+  under_16:
+    title: Participants under 16 (E9)
+    step: population
+    when:
+    - B1.2:
+      - 'Yes'
+  researcher_safety:
+    title: Researcher safety (I2)
+    step: risk
+  vulnerability:
+    title: Vulnerable participants (I4)
+    step: risk
+    when:
+    - B2:
+      - Vulnerability
+  sensitivity:
+    title: Sensitive topics (I5)
+    step: risk
+    when:
+    - B2:
+      - Sensitivity
+  deception:
+    title: Deception and covert research (I6)
+    step: risk
+    when:
+    - B2:
+      - Deception
+  disclosures:
+    title: Disclosures (I7)
+    step: risk
+    when:
+    - B2:
+      - Disclosures
+  invasive:
+    title: Physically invasive procedures (I8)
+    step: risk
+    when:
+    - B2:
+      - My research involves physically invasive
+  security:
+    title: Security-sensitive research (I9)
+    step: risk
+    when:
+    - B2:
+      - Security sensitive
+  medicinal:
+    title: Medicinal products and substances (section H)
+    step: risk
+    when:
+    - B2:
+      - My research involves administration
+  data:
+    title: Sharing research data (J6)
+    step: data
+questions:
+  A2.1:
+    section: external_review
+    question: 'IMPORTANT: UCL does not typically provide ethics review for projects which are led by other institutions
+      or organisations. Please explain why you are seeking UCL ethics review in the space below: Which organisation
+      or institution has overall responsibility for the research?'
+    kind: textarea
+    when:
+    - A2:
+      - 'No'
+    hint: Name the lead institution/organisation and why UCL is reviewing instead.
+  A2.2:
+    section: external_review
+    question: Please explain why you are submitting this project for UCL ethics review, rather than for review by
+      the responsible institution or organisation.
+    kind: textarea
+    when:
+    - A2:
+      - 'No'
+  A3.2:
+    section: external_review
+    question: Please provide details of the external research ethics committee review and briefly explain why UCL
+      REC review is also required for your research.
+    kind: textarea
+    when:
+    - A3:
+      - 'Yes'
+    hint: Name the external committee, its reference, and which parts of the study it does not cover.
+  A4.1:
+    section: external_review
+    question: 'Important: We aim to avoid any unnecessary duplication of ethics review. You should submit a new
+      UCL ethics application if you plan to make substantial changes to the approved project or if this is required
+      by your funder. Otherwise, please select option b) below to register your exisiting UK ethics approval with
+      UCL.'
+    kind: multi
+    options:
+    - I wish to submit a full new UCL ethics application as I am making substantial changes to my approved project
+    - I wish to register my existing UK ethics approval with UCL
+    when:
+    - A4:
+      - 'Yes'
+  A4.1.1:
+    section: external_review
+    question: Please briefly explain why you are submitting a new UCL research ethics application for approval.
+      If you are making substantial changes to your existing external approval, please outline.
+    kind: textarea
+    when:
+    - A4.1:
+      - I wish to submit a full new UCL ethics application as I am making substantial changes to my approved project
+    hint: Summarise what changes compared with the approved project.
+  A4.2:
+    section: external_review
+    question: 'Name of the external organisation which conducted the ethics review:'
+    kind: textarea
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+  A4.3:
+    section: external_review
+    question: Date favourable opinion/ approval issued
+    kind: text
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+  A4.4:
+    section: external_review
+    question: Expiry date for external opinion/ approval
+    kind: text
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+  A4.5:
+    section: external_review
+    question: External review reference number or project ID
+    kind: text
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+  A4.8:
+    section: external_review
+    question: Please provide any other relevant details about the external ethics approval process, including any
+      conditions or provisos of approval.
+    kind: textarea
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+  A4.9:
+    section: external_review
+    question: Please provide an overview of the current status of the research, including why you are requesting
+      to transfer your research ethics approval to UCL. This should cover data collection/ analysis activities conducted
+      to date.
+    kind: textarea
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+    hint: What has been done so far, and why you are moving the approval to UCL.
+  A4.10:
+    section: external_review
+    question: Provide an overview of planned research activities. Will you be making any minor changes to the research
+      as described in the approved ethics application, including project end date?
+    kind: textarea
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+    hint: List the remaining activities and any (minor) changes.
+  A4.11:
+    section: external_review
+    question: If research data will be transferred to or stored at UCL, please provide details here. This should
+      cover arrangements for ensuring data security and proposed retention period. Research involving processing
+      of personal data should be registered with the UCL Data Protection Office; if you have already obtained your
+      registration number, please provide below.
+    kind: textarea
+    when:
+    - A4.1:
+      - I wish to register my existing UK ethics approval with UCL
+  B1.1:
+    section: about
+    question: 'Please briefly outline your reasons for seeking a UCL research ethics review:'
+    kind: textarea
+    when:
+    - B1:
+      - None of the above, but my research presents ethical issues requiring consideration
+    hint: Which ethical issues does the work raise even though it involves no new data, existing data or tissue?
+  B1.4:
+    section: about
+    question: 'Please select all that apply:'
+    kind: multi
+    options:
+    - a) I will analyse/ use existing samples of relevant material
+    - b) I will collect new samples of relevant material from participants
+    when:
+    - B1:
+      - My research involves use of 'relevant material' as defined by the Human Tissue Act
+  C4.2:
+    section: project_details
+    question: How does this new application relate to, or build upon, your previously approved research?
+    kind: textarea
+    when:
+    - C4:
+      - 'Yes'
+    hint: 'One or two sentences: what is new compared with the related approval?'
+  C5.1:
+    section: project_details
+    question: Who is funding the project?
+    kind: multi
+    options:
+    - UCL
+    - UK funder (excluding UCL)
+    - Overseas funder
+    - No funding or self-funded
+    when:
+    - C5:
+      - 'Yes'
+  C5.3:
+    section: project_details
+    question: If available, please provide your WorkTribe project ID
+    kind: text
+    when:
+    - C5:
+      - 'Yes'
+  C6:
+    section: project_details
+    question: Is it possible that the project will give rise to an actual, potential or perceived Conflict of Interest?
+    kind: yes_no
+    hint: Industry partners, paid consultancy or personal interests in the outcome usually count.
+  D2.4:
+    section: design
+    question: Have you received any input on your study design from interested parties (stakeholders), for example,
+      government agencies, professional societies, individuals or communities impacted by the research subject,
+      healthcare or academic centres etc?
+    kind: yes_no
+    when:
+    - D2:
+      - Interviews (semi-structured or unstructured)
+      - Survey/ questionnaire(s)
+      - Focus groups
+      - Observations in private/ closed settings e.g., workplaces, classrooms, participant homes
+      - Observations in public settings
+      - Oral history
+      - Autoethnography
+      - Analysis of existing or secondary data
+      - Behavioural or cognitive testing
+      - Clinical procedure or intervention
+      - Non-clinical procedure or intervention
+      - Audio/ video recording or photography in a public place
+      - Audio/ video recording or photography in a private place and/or using online conferencing tools
+      - Randomised Control Trial
+      - Imaging techniques e.g., ultrasound, Magnetic Resonance Imaging (MRI)
+      - Other (please detail in follow up questions)
+  D2.5:
+    section: design
+    question: Please explain how you have involved stakeholders in the design of the study and, if applicable, how
+      they will continue to be involved at each stage from design to dissemination.
+    kind: textarea
+    when:
+    - D2.4:
+      - 'Yes'
+    hint: Who was involved (e.g. community members, patients, an advisory group), how, and what changed as a result.
+  D2.6:
+    section: design
+    question: Please use the space below to provide any context-specific information that may be helpful to understand
+      when reviewing your application. For example, you could detail any cultural values, personal lived experiences
+      or perspectives that have informed your approach to collecting or analysing data or engaging with participants.
+    kind: textarea
+    when:   # tool choice: only after stakeholder input (D2.4 = Yes); the form itself shows it for any D2 method
+    - D2.4:
+      - 'Yes'
+    hint: Anything a reviewer outside your field needs to know (context, terminology, setting).
+  D3.1:
+    section: overseas
+    question: Please provide details on the overseas location(s) of the research/ data collection
+    kind: textarea
+    when:
+    - D3:
+      - 'Yes'
+    hint: Countries and settings, and whether collection is online or in person.
+  D3.2:
+    section: overseas
+    question: Will you or any other UCL researchers be travelling overseas to collect data?
+    kind: yes_no
+    when:
+    - D3:
+      - 'Yes'
+  D3.3:
+    section: overseas
+    question: Please provide detail on who will carry out data collection overseas and any training they have undertaken
+      on ethical research conduct.
+    kind: textarea
+    when:
+    - D3.2:
+      - 'No'
+    hint: Who collects the data locally, their training, and how UCL supervises them.
+  D3.4:
+    section: overseas
+    question: Is there currently any UK government advice against travel to any countries listed above?
+    kind: yes_no
+    when:
+    - D3.2:
+      - 'Yes'
+  D3.5:
+    section: overseas
+    question: Please provide more detail about how the UK government travel advice impacts your research and outline
+      the steps you have taken to manage risks associated with travel, such as UCL travel risk assessment.
+    kind: textarea
+    when:
+    - D3.4:
+      - 'Yes'
+    hint: Which advice applies and how you will keep researchers safe or adapt the plan.
+  D3.6:
+    section: overseas
+    question: Will local research ethics approval be obtained in the host country/ countries? Where possible, this
+      is strongly encouraged as this is best practice, and in-country ethics committees will be best placed to assess
+      how cultural considerations should be factored into your research.
+    kind: yes_no
+    when:
+    - D3:
+      - 'Yes'
+  D3.7:
+    section: overseas
+    question: Please explain why local research ethical approval is not being obtained and explain how the proposed
+      research meets the cultural, ethical and legal requirements of the country where the research is being undertaken.
+      Please note any collaboration with local organisations or experts.
+    kind: textarea
+    when:
+    - D3.6:
+      - 'No'
+    hint: Why no local approval is needed or possible, and how you check local rules are met.
+  D3.8:
+    section: overseas
+    question: Please provide detail about the Research Ethics Committee(s) from which overseas ethical review will
+      be sought. Confirm whether approval is issued, pending or yet to be applied for.
+    kind: textarea
+    when:
+    - D3.6:
+      - 'Yes'
+    hint: Committee name, country, status (submitted/approved) and reference.
+  D3.9:
+    section: overseas
+    question: Does this project require any other approval or permissions from regulatory bodies or host sites in
+      the country/ countries of the intended research?
+    kind: yes_no
+    when:
+    - D3:
+      - 'Yes'
+  D3.10:
+    section: overseas
+    question: 'Please provide details:'
+    kind: textarea
+    when:
+    - D3.9:
+      - 'Yes'
+  D4.3:
+    section: location
+    question: Have you already obtained the permissions listed above?
+    kind: choice
+    options:
+    - Yes, I have obtained permissions and can upload evidence
+    - No, I have not yet obtained permissions. I confirm that permissions will be obtained before I commence data
+      collection.
+    when:
+    - D4.1:
+      - 'Yes'
+  G1:
+    section: secondary_data
+    question: 'What type(s) of data do you intend to access for your research? Select all that apply:'
+    kind: multi
+    options:
+    - Existing data about people that was not originally collected for research purposes.
+    - Data previously collected for research purposes.
+  G1.1:
+    section: secondary_data
+    question: a) What is the source of the data/ dataset(s)? If the dataset has a name and/or URL, please provide.
+    kind: textarea
+    when:
+    - G1:
+      - Existing data about people that was not originally collected for research purposes.
+      - Data previously collected for research purposes.
+    hint: Dataset name, provider and link.
+  G1.2:
+    section: secondary_data
+    question: b) Who is the originator or owner of the data/ dataset(s)?
+    kind: textarea
+    when:
+    - G1:
+      - Existing data about people that was not originally collected for research purposes.
+      - Data previously collected for research purposes.
+  G1.3:
+    section: secondary_data
+    question: c) Is the data/ dataset(s) in the public domain, i.e., freely accessible to anyone without completing
+      an application or screening, creating a user account, signing up for an API etc? If the data is not in the
+      public domain, explain how you will access it.
+    kind: textarea
+    when:
+    - G1:
+      - Existing data about people that was not originally collected for research purposes.
+      - Data previously collected for research purposes.
+  G1.4:
+    section: secondary_data
+    question: d) If you need to obtain any permissions or agreements to use the data/ dataset(s), or if there are
+      terms and conditions/ licence terms on which the data is made available, please provide details. It is your
+      responsibility to keep informed about any changes to terms and ensure that your proposed use of data is compliant
+      for the duration of your project.
+    kind: textarea
+    when:
+    - G1:
+      - Existing data about people that was not originally collected for research purposes.
+      - Data previously collected for research purposes.
+  G1.5:
+    section: secondary_data
+    question: 'Data previously collected for research purposes: Did the original research data collection receive
+      an ethics approval or favourable opinion? If you are using multiple datasets, please select all that apply:'
+    kind: multi
+    options:
+    - 'Yes'
+    - 'No'
+    - Unable to confirm
+    when:
+    - G1:
+      - Data previously collected for research purposes.
+  G1.6:
+    section: secondary_data
+    question: 'Yes: Please provide details, including review body.'
+    kind: textarea
+    when:
+    - G1.5:
+      - 'Yes'
+  G1.7:
+    section: secondary_data
+    question: 'No: Please explain why the original research data collection did not receive an ethics review. Existing
+      research data should only be used if you are able to verify the credentials of the researchers who collected
+      the data and confirm that the datasets were created responsibly.'
+    kind: textarea
+    when:
+    - G1.5:
+      - 'No'
+  G1.8:
+    section: secondary_data
+    question: 'Unable to confirm: Please explain why you are unable to confirm whether the research data was collected
+      under ethics approval/ favourable opinion. Existing research data should only be used if you are able to verify
+      the credentials of the researchers who collected the data and confirm that the datasets were created responsibly.'
+    kind: textarea
+    when:
+    - G1.5:
+      - Unable to confirm
+  G1.9:
+    section: secondary_data
+    question: 'Data previously collected for research purposes: Were the datasets collected or created with consent
+      from the data subjects for future reuse in academic research? If you are using multiple datasets, please select
+      all that apply:'
+    kind: multi
+    options:
+    - 'Yes'
+    - 'No'
+    - Unable to confirm
+    when:
+    - G1:
+      - Data previously collected for research purposes.
+  G1.10:
+    section: secondary_data
+    question: 'Yes: Please provide details. Consider whether the purpose of your research aligns with the consent
+      given by individuals. If not, please outline a) how you will manage any risks or mitigate potential for harm
+      to the original data subjects and b) whether there is scope to obtain new consent from data subjects for your
+      new purpose.'
+    kind: textarea
+    when:
+    - G1.9:
+      - 'Yes'
+  G1.11:
+    section: secondary_data
+    question: 'No: Please provide details. If the data subjects were informed that their data would not be shared
+      with other researchers or used in any future research during the original data collection, this position should
+      be respected.'
+    kind: textarea
+    when:
+    - G1.9:
+      - 'No'
+  G1.12:
+    section: secondary_data
+    question: 'Unable to confirm: Please explain why you are unable to confirm whether the data was collected with
+      consent from the data subjects. Existing data should only be used if you are able to verify the credentials
+      of the researchers who collected the data and confirm that the datasets were created responsibly.'
+    kind: textarea
+    when:
+    - G1.9:
+      - Unable to confirm
+  G1.13:
+    section: secondary_data
+    question: How does your research purpose differ from the original purpose(s) for which the data/ dataset(s)
+      was collected or created?
+    kind: textarea
+    when:
+    - G1:
+      - Existing data about people that was not originally collected for research purposes.
+    hint: Original purpose vs. your purpose; why reuse is compatible.
+  G2:
+    section: secondary_data
+    question: 'For each of the datasets you intend to access and use, please select all that apply:'
+    kind: multi
+    options:
+    - 'Anonymised: The data will be fully anonymised when accessed by the researcher(s). The research team does
+      not have access to any other data or information which could render the data identifiable if linked.'
+    - 'Identifiable (including pseudonymised): Individuals could be identified (or re-identified) using the data,
+      either on its own or in combination with other data available to the research team.'
+  G2.1:
+    section: secondary_data
+    question: 'Anonymised data: Please outline how the data/ datasets will be anonymised before you gain access.'
+    kind: textarea
+    when:
+    - G2:
+      - 'Anonymised: The data will be fully anonymised when accessed by the researcher(s). The research team does
+        not have access to any other data or information which could render the data identifiable if linked.'
+    hint: Who anonymises, how, and whether you could ever re-identify people.
+  G2.2:
+    section: secondary_data
+    question: 'Identifiable data/ datasets: Do you intend to seek consent from individuals who may be identifiable
+      in the dataset(s)?'
+    kind: yes_no
+    when:
+    - G2:
+      - 'Identifiable (including pseudonymised): Individuals could be identified (or re-identified) using the data,
+        either on its own or in combination with other data available to the research team.'
+  G2.3:
+    section: secondary_data
+    question: Individuals should usually provide consent for data which could identify them to be used in research.
+      Please explain why you will not seek consent from individual data subjects and why you feel it is justified
+      to use potentially identifiable data without consent.
+    kind: textarea
+    when:
+    - G2.2:
+      - 'No'
+  G2.4:
+    section: secondary_data
+    question: How will you approach these individuals and obtain consent for use of their data? Upload any supporting
+      materials, for example, letters, emails, information sheets and consent forms using the 'upload' button below.
+    kind: textarea
+    when:
+    - G2.2:
+      - 'Yes'
+  G2.6:
+    section: secondary_data
+    question: 'Identifiable data/ datasets: How will you protect the privacy and confidentiality of individuals
+      whose data will be used?'
+    kind: textarea
+    when:
+    - G2.2:
+      - 'Yes'
+      - 'No'
+    hint: Pseudonymisation, access control, storage, and how results avoid identifying people.
+  G2.7:
+    section: secondary_data
+    question: 'Identifiable data/ datasets: How will findings from the research be communicated to the individuals
+      whose data is being used, if at all?'
+    kind: textarea
+    when:
+    - G2.2:
+      - 'Yes'
+      - 'No'
+  G2.8:
+    section: secondary_data
+    question: 'Identifiable data/ datasets: Can individuals request withdrawal of their identifiable data from your
+      research? If yes, please explain how you will enable withdrawal. If no, please provide justification.'
+    kind: textarea
+    when:
+    - G2.2:
+      - 'Yes'
+      - 'No'
+  F1:
+    section: human_tissue
+    question: Specify the amount and types of human tissue that you will collect as part of the study.
+    kind: textarea
+    when:
+    - B1.4:
+      - b) I will collect new samples
+    hint: Type of material (e.g. saliva, blood), amount per participant, and number of samples.
+  F2:
+    section: human_tissue
+    question: Who will collect the samples?
+    kind: textarea
+    when:
+    - B1.4:
+      - b) I will collect new samples
+  F3:
+    section: human_tissue
+    question: Describe your methods for analysing the samples.
+    kind: textarea
+    when:
+    - B1.4:
+      - b) I will collect new samples
+    hint: Analyses planned (e.g. hormone assays) and where they are done.
+  F4:
+    section: human_tissue
+    question: Could you produce findings of clinical significance that would need to be reported to the participants?
+    kind: yes_no
+    when:
+    - B1.4:
+      - b) I will collect new samples
+  F4.1:
+    section: human_tissue
+    question: Describe your arrangements for reporting the findings to the participants.
+    kind: textarea
+    when:
+    - F4:
+      - 'Yes'
+  F5:
+    section: human_tissue
+    question: Specify the amount and the type(s) of human tissue samples that will be used as part of the study.
+      Explain how the samples were originally collected and for what purpose.
+    kind: textarea
+    when:
+    - B1.4:
+      - a) I will analyse/ use existing samples
+  F6:
+    section: human_tissue
+    question: Who is currently responsible for the samples which will be released to the research team? If samples
+      are not held on UCL premises, please outline the arrangements for transfer.
+    kind: textarea
+    when:
+    - B1.4:
+      - a) I will analyse/ use existing samples
+  F7:
+    section: human_tissue
+    question: 'Specify the form that samples will be received in (select all that apply):'
+    kind: multi
+    options:
+    - a) Fully anonymised form (there is no link between stored tissue and personal data of the donor)
+    - b) Linked anonymised form (personal data is linked to stored tissue but the individual who has provided the
+      samples will not be identifiable to you)
+    - c) Identifiable form
+    when:
+    - B1.4:
+      - a) I will analyse/ use existing samples
+  F8:
+    section: human_tissue
+    question: Will any of the samples be imported from outside the UK?
+    kind: yes_no
+    when:
+    - B1.4:
+      - a) I will analyse/ use existing samples
+  F8.1:
+    section: human_tissue
+    question: 'Provide details of the sample holder and sufficient information to give assurance that the original
+      collection complies with ethics requirements in the exporting country. Supporting documentation can be uploaded
+      using the button below:'
+    kind: textarea
+    when:
+    - F8:
+      - 'Yes'
+  F8.2:
+    section: human_tissue
+    question: Outline arrangements for transferring samples to UCL from outside the UK, including any material transfer
+      agreements in place/ to be obtained.
+    kind: textarea
+    when:
+    - F8:
+      - 'Yes'
+  F9:
+    section: human_tissue
+    question: Has donor consent been obtained for the use of human tissue samples in research?
+    kind: yes_no
+    when:
+    - B1.4:
+      - a) I will analyse/ use existing samples
+  F9.1:
+    section: human_tissue
+    question: Please describe in detail the consent already in place for use of the material you will access.
+    kind: textarea
+    when:
+    - F9:
+      - 'Yes'
+  F9.3:
+    section: human_tissue
+    question: Will you seek consent from the original donors to use the human tissue samples?
+    kind: yes_no
+    when:
+    - F9:
+      - 'No'
+  F9.3.1:
+    section: human_tissue
+    question: Please explain why consent will not be obtained and why it is justifiable, in your view, to use the
+      samples in your research without donor consent.
+    kind: textarea
+    when:
+    - F9.3:
+      - 'No'
+  F9.3.2:
+    section: human_tissue
+    question: Describe your arrangements for obtaining consent from the original donors. Upload any documents for
+      capturing consent e.g., consent forms, information sheets for donors below.
+    kind: textarea
+    when:
+    - F9.3:
+      - 'Yes'
+  F10:
+    section: human_tissue
+    question: Where will samples be stored during the study and who will have access to them? Please either include
+      details of the UCL Human Tissue Licence which samples will be stored under, or explain why storage under licence
+      is not required (click the information icon for further guidance).
+    kind: textarea
+    hint: Storage location, the HTA licence it falls under, and who can access it.
+  F11:
+    section: human_tissue
+    question: What will happen to the material at the end of the study? When will the samples be destroyed?
+    kind: textarea
+    hint: Destruction or transfer at the end, and when.
+  E8:
+    section: consent
+    question: Will you seek informed consent from all participants before starting data collection activities? 'Yes'
+      should only be selected if all participants will be given enough information to understand the full aims/
+      purpose of the research before they agree to take part.
+    kind: yes_no
+    default: 'Yes'
+  E8.1:
+    section: consent
+    question: Please explain why you will not obtain informed consent from all participants. If you will obtain
+      consent from some (but not all) participant groups, please detail your consent procedures. Use the button
+      below to upload any recruitment materials for participants.
+    kind: textarea
+    when:
+    - E8:
+      - 'No'
+    hint: Who will not give informed consent and why; how their rights are protected instead.
+  E9:
+    section: under_16
+    question: Will 'opt in' informed consent be obtained from the parents/ legal guardians of all partcipants under
+      the age of 16?
+    kind: yes_no
+  E9.1:
+    section: under_16
+    question: Outline how you will inform parents and guardians about the research and obtain their consent for
+      their child to participate.
+    kind: textarea
+    when:
+    - E9:
+      - 'Yes'
+    hint: How parents/guardians receive information, how they give consent, and how it is recorded.
+  E9.2:
+    section: under_16
+    question: Please provide a rationale for not seeking opt-in parental consent. Your response should explain why
+      an opt-in process would either render the research impossible or seriously impair achievement of the research
+      objectives.
+    kind: textarea
+    when:
+    - E9:
+      - 'No'
+    hint: Why opt-in consent is not feasible or appropriate, and who agreed (school, gatekeepers).
+  E9.3:
+    section: under_16
+    question: Provide details of any stakeholder engagement you have undertaken, for example with schools, parents
+      or youth organisations, to establish whether an opt-out consent procedure is appropriate for your study.
+    kind: textarea
+    when:
+    - E9:
+      - 'No'
+  E9.4:
+    section: under_16
+    question: 'Please outline the parent/legal guardian opt-out consent procedure. Include detail on: a) how you
+      will ensure that parents remain fully informed about their child''s participation throughout the project and
+      have more than one opportunity to opt-out. b) how you will evaluate the effectiveness of the opt-out consent
+      process throughout the project.'
+    kind: textarea
+    when:
+    - E9:
+      - 'No'
+  E9.5:
+    section: under_16
+    question: Describe your procedure for discontinuing a participant's involvement if their parent or guardian
+      opts out after the research has begun.
+    kind: textarea
+    when:
+    - E9:
+      - 'No'
+  E9.6:
+    section: under_16
+    question: In addition to legal guardian consent, you should also obtain consent from participants under the
+      age of 16 where it is age appropriate to do so. Please explain how you will ensure that young participants
+      understand the research and agree to take part without coercion, and how this will be documented.
+    kind: textarea
+    hint: How you explain the study to young people in age-appropriate language and record their assent.
+  I2.1:
+    section: researcher_safety
+    question: Please provide details and explain how these risks will be managed
+    kind: textarea
+    when:
+    - I2:
+      - 'Yes'
+    hint: What could happen to the researcher (e.g. lone working, distressing content) and the safeguards.
+  I4:
+    section: vulnerability
+    question: Please explain why participants could be considered to be vulnerable in the context of this research.
+    kind: textarea
+    hint: Which participants are vulnerable in this context and why (e.g. age, health, dependency on researchers).
+  I4.1:
+    section: vulnerability
+    question: Describe any potential risks associated with including vulnerable participants in your study and explain
+      why the potential benefits of conducting this research outweigh these risks.
+    kind: textarea
+    hint: Concrete risks for these participants (distress, coercion, misunderstanding of consent).
+  I4.2:
+    section: vulnerability
+    question: Please outline the steps you will take to mitigate the risks described above.
+    kind: textarea
+    hint: 'Steps per risk: extra consent checks, breaks, trained staff, signposting, withdrawal without reason.'
+  I5:
+    section: sensitivity
+    question: Please explain why your research topic(s) or questions might induce stress, anxiety, humiliation or
+      other negative consequences for participants.
+    kind: textarea
+    hint: Which topics may cause distress and in which part of the study.
+  I5.1:
+    section: sensitivity
+    question: Describe any potential risks associated with exploring these topics and the steps you will take to
+      mitigate them, for example, signposting to relevant support resources. How will the potential benefits of
+      conducting this research outweigh the risks you have identified?
+    kind: textarea
+    hint: 'Risks and steps: skipping questions, breaks, stopping rules, support contacts on the debrief.'
+  I6:
+    section: deception
+    question: Research that deceives or purposely misleads or misinforms participants, and/or and covert methods,
+      should only be used when it is both essential to the research objectives and no alternative approach is possible,
+      for example, where overt observation may alter the phenomenon being studied.With reference to the above criteria,
+      please explain how you will employ deceptive/ covert methods and provide justification for the use of this
+      strategy.
+    kind: textarea
+    hint: What is withheld or misleading, why the research question requires it, and why harm is unlikely.
+  I6.1:
+    section: deception
+    question: Will you fully debrief your participants on the true aims and objectives of your study post-participation?
+    kind: yes_no
+  I6.2:
+    section: deception
+    question: 'Please provide details on how you will debrief participants (including whether participants will
+      have an opportunity to withdraw from your research after debriefing):'
+    kind: textarea
+    when:
+    - I6.1:
+      - 'Yes'
+    hint: When and how participants are debriefed and can withdraw their data afterwards.
+  I6.3:
+    section: deception
+    question: Please provide justification for not providing a full debrief to participants.
+    kind: textarea
+    when:
+    - I6.1:
+      - 'No'
+  I7:
+    section: disclosures
+    question: Explain why participation in your research could lead or prompt participants to make disclosures about
+      illegal activities, safeguarding concerns and/or information which could make them the target of reprisals
+      or otherwise represent a risk to themselves or others.
+    kind: textarea
+    hint: Which disclosures could happen (e.g. self-harm, illegal activities) and in which activity.
+  I7.1:
+    section: disclosures
+    question: Outline the steps you will take to manage the risk of disclosures being made. If there is a foreseeable
+      probability that you may be obliged to breach participant confidentiality and report to relevant authorities,
+      this should be explored here and explained during your informed consent processes.
+    kind: textarea
+    hint: Limits of confidentiality in the information sheet, who acts on a disclosure, and how (safeguarding lead).
+  I8:
+    section: invasive
+    question: Identify any risks associated with invasive procedures involving participants. Risks might include
+      injury, pain, discomfort, fainting, claustrophobia. If you are performing multiple procedures, please address
+      each method separately.
+    kind: textarea
+    hint: Each procedure and its risks (e.g. discomfort, injury, infection).
+  I8.1:
+    section: invasive
+    question: Outline your procedures for managing each of the risks outlined above.
+    kind: textarea
+    hint: Trained staff, screening, hygiene, first aid, stopping rules.
+  I8.2:
+    section: invasive
+    question: Could any of the above procedures result in any incidental findings about participants health or wellbeing
+      (for example, by revealing a previously unknown medical condition?)
+    kind: yes_no
+  I8.3:
+    section: invasive
+    question: 'Outline what adverse/incidental findings could be made as a result of participation and detail your
+      protocol for how these will be dealt with. (Please note: this information must also be explained to participants
+      during the consent process.)'
+    kind: textarea
+    when:
+    - I8.2:
+      - 'Yes'
+  I9:
+    section: security
+    question: 'Does your research fit into any of the following security-sensitive categories? Please select all
+      that apply:'
+    kind: multi
+    options:
+    - a) Commissioned by a military organisation or defence or security framework call
+    - b) Requires or involves the acquisition of security clearance
+    - c) Concerns terrorist or extremist groups, ideology or actions
+    - d) Accessing, using or transmitting materials, programmes or software that would normally be prohibited under
+      UCL Computing Regulations (Acceptable Use Policy)
+    - e) None of the above, but my research is security-sensitive for another reason
+  I9.1:
+    section: security
+    question: 'Please provide details of the organisation and/or framework call:'
+    kind: textarea
+    when:
+    - I9:
+      - a) Commissioned by a military organisation or defence or security framework call
+  I9.2:
+    section: security
+    question: Does your research involve the storage on a computer of any records, statements or other documents/
+      data relating to terrorist or extremist groups, ideology or actions?
+    kind: yes_no
+    when:
+    - I9:
+      - c) Concerns terrorist or extremist groups, ideology or actions
+  I9.3:
+    section: security
+    question: You are advised to store these records or statements electronically in the UCL Data Safe Haven (DSH).
+      Paper documents should be scanned and uploaded. Access to the DSH is secure and protected by password, PIN
+      and password code.
+    kind: multi
+    options:
+    - I confirm that I will store all relevant documents relevant in the Data Safe Haven.
+    - Storage in the Data Safe Haven is not suitable for my project for reasons outlined below
+    when:
+    - I9.2:
+      - 'Yes'
+    manual: true
+  I9.4:
+    section: security
+    question: Please explain why you are not able to store the data in the UCL Data Safe Haven and provide details
+      of your storage arrangements.
+    kind: textarea
+    when:
+    - I9.3:
+      - Storage in the Data Safe Haven is not suitable for my project for reasons outlined below
+  I9.5:
+    section: security
+    question: Does your research involve electronic transmission, e.g., by email or file transfer, of records, statements
+      or other documents/ data relating to terrorist or extremist groups, ideology or actions?
+    kind: yes_no
+    when:
+    - I9:
+      - c) Concerns terrorist or extremist groups, ideology or actions
+  I9.6:
+    section: security
+    question: Will your research involve visits to websites that might be associated with terrorism or extremist
+      organisations?
+    kind: yes_no
+    when:
+    - I9:
+      - c) Concerns terrorist or extremist groups, ideology or actions
+  I9.7:
+    section: security
+    question: 'Please explain why transmission is required and your arrangements for ensuring data security:'
+    kind: textarea
+    when:
+    - I9.5:
+      - 'Yes'
+  I9.8:
+    section: security
+    question: Websites associated with extremist or terrorist organisations may be subject to surveillance by the
+      police. Accessing such sites might lead to police enquiries. You must only access these sites through the
+      Virtual Desktop in the Data Safe Haven and transfer data directly to the DSH. This will ensure that these
+      sites will only be accessed from a UCL IP address.
+    kind: multi
+    options:
+    - I will only access security-sensitive websites through the Virtual Desktop in the Data Safe Haven (DSH).
+    - Accessing websites through the Data Safe Haven is not suitable for my project for the reasons outlined below.
+    when:
+    - I9.6:
+      - 'Yes'
+    manual: true
+  I9.9:
+    section: security
+    question: Please explain why you are not able to access websites through the Virtual Desktop in the UCL Data
+      Safe Haven. Your arrangements for access should meet an equivalent security standard; please outline.
+    kind: textarea
+    when:
+    - I9.8:
+      - Accessing websites through the Data Safe Haven is not suitable for my project for the reasons outlined below.
+  I9.10:
+    section: security
+    question: Please provide details. Describe the material or programmes you intend to access/use and why this
+      is necessary for your research purpose.
+    kind: textarea
+    when:
+    - I9:
+      - d) Accessing, using or transmitting materials, programmes or software that would normally be prohibited
+        under UCL Computing Regulations (Acceptable Use Policy)
+  I9.11:
+    section: security
+    question: You must consult the UCL Information Security Group before proceeding with this research.
+    kind: choice
+    options:
+    - I have already discussed the research with UCL ISG and can provide details below
+    - I will not proceed with any research activity which may be prohibited by the Acceptable Use Policy until I
+      have consulted with UCL ISG. I will update this research ethics application in line with ISG advice and recommendations.
+    when:
+    - I9:
+      - d) Accessing, using or transmitting materials, programmes or software that would normally be prohibited
+        under UCL Computing Regulations (Acceptable Use Policy)
+    manual: true
+  I9.12:
+    section: security
+    question: Please provide detail on the outcome of your consultation with UCL ISG and how you will implement
+      any recommendations made.
+    kind: textarea
+    when:
+    - I9.11:
+      - I have already discussed the research with UCL ISG and can provide details below
+  I9.13:
+    section: security
+    question: 'Please provide details:'
+    kind: textarea
+    when:
+    - I9:
+      - e) None of the above, but my research is security-sensitive for another reason
+    hint: Why the research is security sensitive and how data/material are protected.
+  H1.1:
+    section: medicinal
+    question: Product/ substance name
+    kind: text
+    hint: If you use several products, describe the others in the text answers (the form repeats this block per
+      product).
+  H1.2:
+    section: medicinal
+    question: 'Medicinal products only: Name of Active Pharmaceutical Ingredient(s)'
+    kind: text
+  H1.3:
+    section: medicinal
+    question: What is your proposed plan for sourcing, distributing and dispensing the product/ substance? If you
+      have made arrangements with a relevant pharmacy and/or chosen a manufacturer or supplier, please provide details.
+    kind: textarea
+  H1.4:
+    section: medicinal
+    question: How and where will the product be safely stored during the research?
+    kind: textarea
+  H1.5:
+    section: medicinal
+    question: How will disposal of the product/ substance be managed at the end of the study?
+    kind: textarea
+  H2.1:
+    section: medicinal
+    question: What is the proposed dosage/ quantity to be given to participants? How did you determine this?
+    kind: textarea
+    hint: Dose per session, how it was chosen (literature, guidance) and maximum exposure.
+  H2.2:
+    section: medicinal
+    question: How and where will the product/ substance be administered to participants? Who will be responsible
+      for this?
+    kind: textarea
+  H2.3:
+    section: medicinal
+    question: Are there any known side effects? If so, how will participants be informed about them?
+    kind: textarea
+  H2.4:
+    section: medicinal
+    question: Are there any known interactions with medicines or products?
+    kind: textarea
+  H2.5:
+    section: medicinal
+    question: How will participants be screened for safety, if needed?
+    kind: textarea
+  H2.6:
+    section: medicinal
+    question: How will participants be monitored and followed up after administration?
+    kind: textarea
+  H2.7:
+    section: medicinal
+    question: Please describe the procedure you will follow if a participant has a known or suspected adverse reaction
+      to the substance/ product.
+    kind: textarea
+    hint: Who to contact, how to stop, how to report adverse events and to whom.
+  H3:
+    section: medicinal
+    question: Are any of the products listed above unlicensed, or to be used outside the terms of the licence ('off-label')?
+    kind: choice
+    options:
+    - 'Yes'
+    - 'No'
+    - Not applicable - the substances listed above are not medicinal products
+  H3.1:
+    section: medicinal
+    question: Please provide further information on the status of the product and manufacturer, including relevant
+      licences to produce and sell medicines. If the product is licensed outside the UK and used within the UK,
+      please specify.
+    kind: textarea
+    when:
+    - H3:
+      - 'Yes'
+  J6:
+    section: data
+    question: Please outline proposed arrangements for sharing and/or archiving the research data. Include details
+      of:whether data will be anonymised prior to sharing and/or archiving. If identifiable data may be shared or
+      archived, please provide justification and ensure that consent is in place.access controls or data-use agreements,
+      where relevanthow long different types of data (e.g. identifiable, pseudonymised, anonymised) will be retained
+    kind: textarea
+    when:
+    - J5:
+      - 'Yes'
+    hint: Repository (e.g. UCL Research Data Repository), what is shared, anonymisation, licence and when.

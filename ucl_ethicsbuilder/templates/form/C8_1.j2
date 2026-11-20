@@ -1,0 +1,5 @@
+{% for r in p.external_team %}
+{{ r.full_name }}, {{ r.organisation }} ({{ r.org_type }}), {{ r.country }}{% if r.email %} ({{ r.email }}){% endif %}: {{ r.role }}
+{% else %}
+No external collaborators.
+{% endfor %}

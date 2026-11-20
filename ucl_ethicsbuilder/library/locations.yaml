@@ -1,0 +1,48 @@
+# Where a study procedure takes place (D4). permission -> D4.1. in_person -> paper/tablet consent possible.
+online:
+  label: Online (Qualtrics / Microsoft Teams)
+  in_person: false
+  d4: >-
+    Online activities use Qualtrics and Microsoft Teams under UCL's institutional licence. Participants are advised to join
+    from a private space, as the research team cannot control their environment.
+lab:
+  label: UCL lab / UCL premises
+  in_person: true
+  d4: Sessions take place in UCL lab spaces or bookable rooms, which are safe and private for participants and researchers.
+community_venue:
+  label: Community venue (e.g. game store, café, community centre)
+  in_person: true
+  d4: >-
+    Activities are held in community venues familiar and accessible to participants. Venues are assessed in advance to
+    confirm that a private or semi-private room is available and separated from public areas; signage informs bystanders
+    that research is taking place. Where this cannot be confirmed, activities take place on UCL premises.
+  permission: Agreement from the venue owner/manager to use a separated space.
+  risks:
+    - risk: Conversations may be overheard in a public venue
+      mitigation: Venues are assessed in advance for privacy, with UCL premises used as a fallback.
+event:
+  label: Conference / public event
+  in_person: true
+  d4: >-
+    The activity takes place in a dedicated room and timeslot at the event, clearly separate from the general programme.
+    Attendees can enter or leave freely without affecting their wider event experience. Printed information sheets are
+    available at the door for attendees who learn about the session on the day.
+  permission: Agreement from the event organisers for a dedicated room and timeslot.
+  risks:
+    - risk: Attendees may feel pressure to take part
+      mitigation: The session is clearly optional and separate from the event programme, and attendees can leave at any time.
+partner_lab:
+  label: Partner institution lab
+  in_person: true
+  d4: Sessions take place in the partner institution's lab, which allows the same procedure and safety standards as UCL.
+  permission: Written confirmation from the partner institution that the lab may be used.
+workplace:
+  label: Participants' workplace (field setting)
+  in_person: true
+  d4: >-
+    Activities take place in the participants' workplace with the written agreement of the host organisation. The
+    organisation is not told who took part, and findings are reported in aggregate.
+  permission: Written permission from the host organisation.
+  risks:
+    - risk: Colleagues or employers may learn who participates or what they said
+      mitigation: Participation status is not shared with the employer, and workplace details are anonymised in outputs.

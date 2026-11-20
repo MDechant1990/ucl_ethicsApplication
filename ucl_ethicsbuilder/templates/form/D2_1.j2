@@ -1,0 +1,28 @@
+{% if d.instruments or d.custom_tools %}
+MEASUREMENTS & TOOLS
+{% for i in d.instruments %}
+- {{ i.name }} ({{ i.citation }}{% if i.url %}, {{ i.url }}{% endif %}): {{ i.construct }}.
+{% endfor %}
+{% for t in d.custom_tools %}
+- {{ t }} (custom material, uploaded in D2.3)
+{% endfor %}
+{% if d.sensitive_instruments %}
+Well-being measures capture everyday, non-clinical variation. They are not used for screening or diagnosis, scores are not reviewed individually, and no cut-offs are applied.
+{% endif %}
+
+{% endif %}
+METHODS
+{% for m in d.methods %}
+{{ m.label }}: {{ m.description }}
+
+{% endfor %}
+PROCEDURE
+Recruitment and consent. Adults aged {{ p.min_age }}–{{ p.max_age }} are recruited via {{ d.channels_text }}. All participants give informed consent before each activity.
+{% for ph in p.phases %}
+{{ ph.name }} ({{ ph.location | location_label }}{% if ph.lab_location %}, {{ ph.lab_location }}{% endif %}, up to {{ ph.duration_min }} minutes): {{ ph.methods | map("method_label") | join(", ") }}{% if ph.instruments %}; questionnaires: {{ ph.instruments | map("instrument_short") | join(", ") }}{% endif %}.
+{% endfor %}
+{% if p.study_phases | length > 1 %}
+Participants may take part in more than one activity; separate consent is obtained for each, and taking part in one is never a prerequisite for another.
+{% endif %}
+
+Safety and debrief. {% if d.in_person %}A researcher is present throughout in-person sessions, and participants{% else %}Participants{% endif %} can pause or stop at any time. All participants receive a debrief with withdrawal information and links to support services.

@@ -1,0 +1,7 @@
+{# I5.1: risks of sensitive topics and the steps taken. #}
+- Participants are told in the information sheet which topics are covered, and can skip any question or stop at any time without giving a reason.
+- The measures are used for group-level analysis only, not for screening or diagnosis{% if s.warning %}; [describe the risk protocol for answers indicating a risk of self-harm, e.g. who reviews them and when, and how participants are contacted]{% else %}, and scores are not reviewed individually{% endif %}.
+- The debrief sheet lists support services (GP or NHS 111, Samaritans 116 123, Mind{% if p.project_type != "staff" or "ucl_students" in p.populations %}, UCL Student Support and Wellbeing{% endif %}).
+{% if s.safeguarding %}
+- {{ s.safeguarding_names }} can be contacted if a participant becomes distressed.
+{% endif %}

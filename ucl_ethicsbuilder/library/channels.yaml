@@ -1,0 +1,36 @@
+# Recruitment channels (E4).
+mailing_lists:
+  label: University mailing lists
+  text: UCL mailing lists
+posters:
+  label: Posters / flyers
+  text: posters and flyers
+social_media:
+  label: Social media
+  text: social media
+sona:
+  label: SONA (UCL participant pool)
+  text: the UCL participant pool (SONA)
+prolific:
+  label: Prolific
+  text: Prolific
+  note: Prolific participants are identified only by anonymous IDs, are paid via the platform and can withdraw by returning their submission.
+community:
+  label: Online communities (Discord, Reddit, forums)
+  text: posts in relevant online communities (with moderator permission where required)
+  note: Posts clearly identify the study as UCL research and link to the information sheet before any data collection.
+venues:
+  label: Partner venues (in-store / on-site flyers)
+  text: flyers at partner venues
+  note: Venue staff display flyers only and do not actively direct people to take part, to avoid perceived pressure.
+event_programme:
+  label: Conference / event programme
+  text: the event programme
+  note: The session and information sheet are published in the event programme in advance, so attendance is an informed decision.
+professional_networks:
+  label: Professional networks / direct expert invitation
+  text: professional networks and personalised email invitations to experts
+  note: Experts who do not reply receive one reminder after a week; no further contact is made.
+ucl_networks:
+  label: UCL staff networks / EDI groups
+  text: UCL staff networks and equality, diversity and inclusion groups

@@ -1,0 +1,13 @@
+{% if d.data_recipients %}
+{% for r in d.data_recipients %}
+Recipient: {{ r.full_name }}, {{ r.organisation }}, {{ r.country }}.
+{% endfor %}
+What is shared: pseudonymised data only, labelled with participant numbers. Names, contact details, consent forms, the linking key and recordings are never shared.
+How: access through a restricted {{ p.storage }} folder with an individual login, rather than sending copies.
+Safeguards: {% if p.data_sharing_agreement %}a data sharing agreement will be in place before data collection. {% endif %}Participants are informed in the information sheet that named partner institutions will access pseudonymised data.
+{% else %}
+No personal data are transferred outside UCL.
+{% endif %}
+{% for r in d.limited_orgs %}
+{{ r.organisation }} ({{ r.org_type }}) receives {{ "aggregated, anonymised findings only" if r.data_access == "aggregated" else "no participant data" }}.
+{% endfor %}

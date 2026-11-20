@@ -1,0 +1,11 @@
+Inclusion criteria:
+- Aged {{ p.min_age }}–{{ p.max_age }} years
+{% for c in p.inclusion %}
+- {{ c }}
+{% endfor %}
+
+Exclusion criteria:
+{% for c in d.exclusions %}
+- {{ c }}
+{% endfor %}
+- Previous participation in the same study, including pilots

@@ -1,0 +1,6 @@
+- Identifiable data (names, contact details, consent records, linking key): the PI and named UCL researchers who schedule sessions.
+- Pseudonymised data: named UCL research team members, including supervised students{% if d.data_recipients %}, and {{ d.data_recipients | map(attribute="full_name") | join(", ") }} for joint analysis{% endif %}.
+{% for r in d.limited_orgs %}
+- {{ r.organisation }}: {{ "aggregated, anonymised findings only" if r.data_access == "aggregated" else "no access to participant data" }}.
+{% endfor %}
+- Anonymised data (after {{ p.withdrawal }}): the research team{% if p.open_data %}, and other researchers via the UCL Research Data Repository{% endif %}.

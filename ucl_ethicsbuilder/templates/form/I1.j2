@@ -1,0 +1,6 @@
+{% if p.benefits %}
+{{ p.benefits }}
+
+{% endif %}
+For participants: there are no direct benefits beyond compensation for their time, although participants may find it worthwhile to reflect on their experiences and to contribute to research{% if d.methods | selectattr("key", "in", ["co_design", "creative_workshop"]) | list %}, and co-design participants have direct input into resources intended for their own community{% endif %}.
+For wider society: the findings will inform the design of technologies and resources that better support people's well-being.

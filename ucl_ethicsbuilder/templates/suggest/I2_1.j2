@@ -1,0 +1,8 @@
+{# I2.1: researcher safety and wellbeing. The specific risk always needs the researcher's own words. #}
+{% if s.in_person %}
+Sessions take place in person ({{ s.in_person | join(", ") }}). A colleague always knows where and when each session takes place, sessions at external venues are run in pairs where possible, and researchers can end a session at any time if they feel unsafe.
+{% endif %}
+{% if d.has_audio %}
+Researchers may hear distressing accounts; they can debrief with {{ p.pi.full_name or "the principal investigator" }} after sessions and are signposted to the UCL Employee Assistance Programme.
+{% endif %}
+[Describe the specific risk to the research team's safety or wellbeing and how it is managed.]

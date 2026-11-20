@@ -1,0 +1,7 @@
+streamlit
+pydantic>=2
+jinja2
+pyyaml
+python-docx
+pytest
+playwright

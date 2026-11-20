@@ -1,0 +1,12 @@
+{# D3.3 (shown when nobody from UCL travels): who collects the data outside the UK. #}
+{% if not s.abroad_in_person %}
+No data are collected in person outside the UK. The UCL research team runs all activities from the UK using Qualtrics and Microsoft Teams under UCL's institutional licence; participants outside the UK take part remotely.
+{% elif s.externals_abroad %}
+Data collection outside the UK is carried out by:
+{% for r in s.externals_abroad %}
+- {{ r.full_name or "[name]" }} ({{ r.organisation or "[organisation]" }}, {{ r.country }}){% if r.role %}, {{ r.role }}{% endif %}{% if r.experience %}: {{ r.experience }}{% endif %}
+{% endfor %}
+They use the same protocol, information sheets and consent procedure as the UCL team, and {{ p.pi.full_name or "the principal investigator" }} meets them regularly to oversee data collection.
+{% else %}
+[Name who collects the data outside the UK, their organisation, and their training.]
+{% endif %}

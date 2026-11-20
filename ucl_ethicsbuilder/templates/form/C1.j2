@@ -1,0 +1,6 @@
+C1) Title: {{ p.title }}
+C2) Start date: {{ p.start_date }}
+C3) Completion date: {{ p.end_date }}
+C4) Related UCL approval: {{ p.related_ethics_id or "No" }}
+C5) Funded: {{ ("Yes – " ~ p.funder) if p.funded else "No" }}
+C6) Potential conflict of interest: {{ "Consider 'Yes' (industry partner involved) – see E3.1" if d.externals | selectattr("org_type", "equalto", "Industry partner") | list else "No" }}

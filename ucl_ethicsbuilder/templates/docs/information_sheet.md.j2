@@ -1,0 +1,60 @@
+# Participant Information Sheet
+
+**Title of study:** {{ p.title }}
+**Department:** {{ p.pi.department }}, University College London
+**Principal Investigator:** {{ p.pi.full_name }} ({{ p.pi.email }})
+**UCL ethics reference:** (added once approved)
+**Data protection registration:** {{ p.dp_registration or "[number]" }}
+
+You are invited to take part in a research study. Before you decide, please read this information carefully. Please ask us if anything is unclear. You have {{ p.decision_time }} to decide.
+
+## What is the purpose of the study?
+{{ p.aims or "[Plain-language summary of the aims.]" }}
+
+## Why have I been invited?
+We are looking for adults aged {{ p.min_age }}–{{ p.max_age }} who meet the following criteria:
+{% for c in p.inclusion %}
+- {{ c }}
+{% endfor %}
+{% if d.exclusions %}
+You cannot take part if any of the following apply:
+{% for c in d.exclusions %}
+- {{ c }}
+{% endfor %}
+{% endif %}
+
+## Do I have to take part?
+No. Taking part is entirely voluntary. Deciding not to take part, or withdrawing, will not affect your studies, employment, community standing or relationship with UCL{% if p.dual_role %} or any member of the research team{% endif %}.
+
+## What will happen if I take part?
+{% for ph in p.phases %}
+- **{{ ph.name }}** ({{ ph.location | location_label }}{% if ph.lab_location %}, {{ ph.lab_location }}{% endif %}, about {{ ph.duration_min }} minutes): {{ ph.methods | map("method_label") | join(", ") }}.
+{% endfor %}
+{% if p.study_phases | length > 1 %}
+You can choose to take part in one or more of these activities; we ask for your consent separately for each.
+{% endif %}
+{% if d.has_audio %}
+Interviews and discussions will be audio recorded. Recordings are transcribed, identifying details are removed, and the recordings are then deleted.
+{% endif %}
+
+## Will I be compensated?
+You will receive £{{ "%.2f" | format(p.rate_per_hour) }} per hour, paid {{ p.payment_method }}{% if p.course_credit %} or course credit{% endif %}{% for c in d.compensation %}{% if loop.first %} ({% endif %}{{ c.procedure }}: {{ c.amount }}{% if not loop.last %}; {% else %}){% endif %}{% endfor %}.{% if p.in_kind %} You will also receive {{ p.in_kind }}.{% endif %}{% if p.prize %} {{ p.prize | capitalize }}.{% endif %}{% if p.travel_expenses %} Reasonable travel expenses are reimbursed.{% endif %} {% if p.pay_on_withdrawal == "full" %}You will be paid in full even if you stop early.{% else %}If you stop early, you will be paid for the time you took part.{% endif %}
+
+## What are the possible risks?
+{% for r in d.risks %}
+- {{ r.risk }}. {{ r.mitigation }}
+{% endfor %}
+{% if d.sensitive_instruments %}
+- Some questions ask about your stress, mood or well-being. You can skip any question.
+{% endif %}
+
+## Can I withdraw?
+You can stop at any time without giving a reason. You can ask for your data to be deleted up to {{ p.withdrawal }} after taking part by emailing the research team with your participant number. After this, your data are anonymised and cannot be removed.
+
+## What happens to my data?
+UCL is the data controller. Your data are stored securely on {{ p.storage }} under a participant number; your name and contact details are kept separately. {% if d.data_recipients %}Pseudonymised data will be accessed by our partner(s): {% for r in d.data_recipients %}{{ r.organisation }} ({{ r.country }}){% if not loop.last %}, {% endif %}{% endfor %}. {% endif %}Anonymised data are kept for {{ p.retention_years }} years{% if p.open_data %} and may be shared with other researchers via the UCL Research Data Repository{% endif %}. Results will be published at group level only.
+
+The legal basis for processing your personal data is "public task". {% if d.special_category %}The legal basis for processing special category data (e.g. health{% if "ethnicity" in p.demographics %}, ethnicity{% endif %}) is "research purposes". {% endif %}See the UCL general privacy notice for participants in research: https://www.ucl.ac.uk/legal-services/privacy/ucl-general-research-participant-privacy-notice
+
+## Contact
+{{ p.pi.full_name }}, {{ p.pi.email }}. If you wish to complain, contact the UCL Research Ethics Committee: ethics@ucl.ac.uk.

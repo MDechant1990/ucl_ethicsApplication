@@ -1,0 +1,13 @@
+Participants are recruited through general advertisements ({{ d.channels_text }}) rather than direct personal approaches.{% if d.externals %} External partners ({{ d.externals | map(attribute="organisation") | unique | join(", ") }}) may share the advert but are not involved in consent or data collection.{% endif %}
+
+Conflicts of interest: {% if d.externals | selectattr("org_type", "equalto", "Industry partner") | list %}The industry partner contributes expertise and materials but has no involvement in recruitment, receives no personal data and has no right of approval over publications. {% endif %}There are no financial relationships between the research team and participants. Any future conflicts of interest will be declared through an amendment.
+
+Power dynamics: Researchers will not recruit, test or interview people they currently teach, assess, supervise or manage, and will not personally approach colleagues, friends or family. Researchers emphasise that there are no right or wrong answers and that participants can skip any question or stop at any time.
+{% if p.dual_role %}
+Dual roles: {% for r in p.dual_role_team %}{{ r.full_name }}: {{ r.dual_role_details or "[describe the dual role]" }} {% endfor %}Responsibilities are divided so that no single person holds organisational authority and research authority over participants at the same time. Participants are reminded in the information sheet, at recruitment and at consent that their decision has no bearing on their standing in the community or their relationship with any team member.
+{% endif %}
+{% for n in d.population_notes %}
+{{ n }}
+{% endfor %}
+
+Perceived pressure: Participation is voluntary. Not taking part or withdrawing has no effect on participants' studies, employment, community standing or relationship with UCL.

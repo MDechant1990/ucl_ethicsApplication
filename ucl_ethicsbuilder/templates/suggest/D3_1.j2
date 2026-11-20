@@ -1,0 +1,4 @@
+{# Suggested answer for D3.1 (overseas locations), from the procedures marked "outside the UK". #}
+{% for ph in s.abroad %}
+- {{ ph.name }}: {{ ph.label }}{% if ph.venue %} – {{ ph.venue }}{% endif %}{% if not ph.in_person %} (participants may take part online from outside the UK){% endif %}.
+{% endfor %}

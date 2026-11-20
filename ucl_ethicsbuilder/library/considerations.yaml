@@ -1,0 +1,46 @@
+# "Other ethical issues" (I10). An entry is added when ALL `when` conditions match.
+# Conditions test project facts (see rules.facts); list facts match if they contain the value.
+online_recruitment:
+  when: {channels: community}
+  title: Online recruitment
+  text: >-
+    Recruiting through public online platforms means the team cannot fully verify participants' identities or ages. All
+    recruitment materials state the 18+ requirement, the consent form includes an age confirmation step, and the team
+    exercises judgement where there is reason to doubt eligibility.
+multi_country:
+  when: {collect_abroad: true}
+  title: Cultural sensitivity across locations
+  text: >-
+    As activities take place in more than one country, information sheets, consent forms and support signposting are
+    adapted to the legal and cultural context of each location, including translation where necessary.
+dual_role:
+  when: {dual_role: true}
+  title: Researcher wellbeing and insider roles
+  text: >-
+    As community insiders, team members may encounter content or disclosures that are personally challenging. The team
+    holds regular check-ins during data collection, and members are encouraged to raise concerns with the PI.
+representation:
+  when: {methods: co_design}
+  title: Community representation
+  text: >-
+    Co-designed outputs may reflect the views of a subset of the community. This is mitigated through purposive
+    recruitment across channels and participant profiles, and by advisory review of outputs before finalisation.
+industry_partner:
+  when: {org_types: Industry partner}
+  title: Industry partner involvement
+  text: >-
+    The industry partner contributes expertise and materials but receives no personal participant data, has no influence
+    over recruitment, and has no right of approval over publications.
+neurodivergent:
+  when: {populations: neurodivergent}
+  title: Accessibility
+  text: >-
+    Research activities are co-developed with lived-experience experts and offer multiple participation formats and
+    reasonable adjustments, so that the research itself does not create barriers for neurodivergent participants.
+prize:
+  when: {has_prize: true}
+  title: Prizes
+  text: >-
+    The prize follows the conventions of the activity (e.g. organised gaming events) rather than serving as an inducement
+    to take part in research. It is described in the information sheet, and taking part or withdrawing does not affect
+    eligibility for the standard compensation.

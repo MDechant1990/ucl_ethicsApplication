@@ -1,0 +1,6 @@
+{# I5: why topics might cause distress, from the sensitive questionnaires. #}
+{% if s.sensitive %}
+The study includes questionnaires about {{ s.sensitive | map(attribute="construct") | join("; ") }} ({{ s.sensitive | map(attribute="name") | join(", ") }}). Answering questions on these topics may bring up difficult feelings or mild distress for some participants{% if s.warning %}; particular care is needed for the {{ s.warning | map(attribute="name") | join(", ") }} (see I5.1){% endif %}.
+{% else %}
+[Explain which topics or questions might cause distress, and in which part of the study.]
+{% endif %}

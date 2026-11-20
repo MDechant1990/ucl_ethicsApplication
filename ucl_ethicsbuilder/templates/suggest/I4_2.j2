@@ -1,0 +1,9 @@
+{# I4.2: steps to mitigate risks for vulnerable participants. #}
+{% for m in s.vulnerable_mitigations %}
+- {{ m.risk }}: {{ m.mitigation }}
+{% endfor %}
+- Consent: the information sheet is explained in person or by video call and understanding is checked before consent; participants have {{ p.decision_time }} to decide and can ask questions at any time.
+- During sessions: participants can take breaks, skip any question and stop at any time without giving a reason.
+{% if s.safeguarding %}
+- Support: {{ s.safeguarding_names }} can be contacted if a participant becomes distressed.
+{% endif %}
